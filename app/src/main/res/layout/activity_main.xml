@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F0F8FF"
+    tools:context=".MainActivity">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/my_navigation_host"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/my_navigation" />
+
+    <LinearLayout
+        android:id="@+id/bottomLinear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bottom_style">
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigationView"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:background="@android:color/transparent"
+            app:elevation="0dp"
+            app:itemActiveIndicatorStyle="@android:color/transparent"
+            app:itemIconSize="32dp"
+            app:itemIconTint="#F1FAEE"
+            app:itemPaddingTop="5dp"
+            app:itemTextColor="#F1FAEE"
+            app:labelVisibilityMode="selected"
+            app:menu="@menu/bottom_menu" />
+    </LinearLayout>
+</RelativeLayout>
