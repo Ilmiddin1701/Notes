@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.skydoves.colorpickerview.ColorEnvelope
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
 import uz.ilmiddin1701.note.R
@@ -21,9 +22,7 @@ class SettingsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding.apply {
-
-
-
+            btnBack.setOnClickListener { findNavController().popBackStack() }
 
 
 //            colorPickerView.setColorListener(object : ColorEnvelopeListener {

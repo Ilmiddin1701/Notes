@@ -15,8 +15,8 @@
 
         <ImageView
             android:id="@+id/btnBack"
-            android:layout_width="38dp"
-            android:layout_height="38dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_gravity="center_vertical"
             android:layout_marginHorizontal="12dp"
             android:contentDescription="@string/btn_back"
@@ -36,7 +36,7 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:paddingHorizontal="12dp"
-            android:text="Save"
+            android:text="@string/save"
             android:textColor="@color/white"
             android:textSize="22sp" />
     </LinearLayout>
