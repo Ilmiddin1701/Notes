@@ -2,104 +2,138 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="339dp"
+    android:layout_height="wrap_content"
     android:background="#11815A"
     android:orientation="horizontal">
 
-    <LinearLayout
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/lin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_marginHorizontal="8dp"
-        android:background="@color/white"
-        android:orientation="vertical"
-        android:padding="8dp">
+        android:layout_marginVertical="8dp"
+        app:cardCornerRadius="0dp"
+        app:strokeColor="@color/black">
 
-        <com.skydoves.colorpickerview.ColorPickerView
-            android:id="@+id/colorPickerView"
-            android:layout_width="215dp"
-            android:layout_height="215dp" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:padding="8dp">
 
-        <com.skydoves.colorpickerview.sliders.AlphaSlideBar
-            android:id="@+id/alphaSlideBar"
-            android:layout_width="215dp"
-            android:layout_height="32dp"
-            android:layout_marginTop="15dp"
-            app:borderColor_AlphaSlideBar="@android:color/darker_gray"
-            app:borderSize_AlphaSlideBar="5"
-            app:selector_AlphaSlideBar="@drawable/colorpickerview_wheel" />
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="90dp"
+                app:cardElevation="5dp"
+                app:strokeColor="@color/black">
 
-        <com.skydoves.colorpickerview.sliders.BrightnessSlideBar
-            android:id="@+id/brightnessSlide"
-            android:layout_width="215dp"
-            android:layout_height="32dp"
-            android:layout_marginTop="10dp"
-            app:borderColor_BrightnessSlider="@android:color/darker_gray"
-            app:borderSize_BrightnessSlider="5"
-            app:selector_BrightnessSlider="@drawable/colorpickerview_wheel" />
-    </LinearLayout>
+                <com.skydoves.colorpickerview.ColorPickerView
+                    android:id="@+id/colorPickerView"
+                    android:layout_width="170dp"
+                    android:layout_height="170dp" />
+            </com.google.android.material.card.MaterialCardView>
 
-    <TextView
-        android:id="@+id/colorCode"
+            <com.skydoves.colorpickerview.sliders.AlphaSlideBar
+                android:id="@+id/alphaSlideBar"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:borderColor_AlphaSlideBar="@android:color/darker_gray"
+                app:borderSize_AlphaSlideBar="5"
+                app:selector_AlphaSlideBar="@drawable/colorpickerview_wheel" />
+
+            <com.skydoves.colorpickerview.sliders.BrightnessSlideBar
+                android:id="@+id/brightnessSlide"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:borderColor_BrightnessSlider="@android:color/darker_gray"
+                app:borderSize_BrightnessSlider="5"
+                app:selector_BrightnessSlider="@drawable/colorpickerview_wheel" />
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/colorCodeAndText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/lin"
         android:layout_alignParentEnd="true"
-        android:layout_gravity="center"
         android:layout_marginEnd="8dp"
         android:layout_toEndOf="@id/lin"
-        android:background="@color/white"
-        android:gravity="center"
-        android:text="#175C62"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        app:cardCornerRadius="0dp"
+        app:strokeColor="@color/black">
 
-    <TextView
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/colorCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/colorCodeText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="@string/color_code"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/selectedColorView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/colorCode"
+        android:layout_above="@id/btnOk"
+        android:layout_below="@id/colorCodeAndText"
         android:layout_alignParentEnd="true"
-        android:layout_gravity="center"
+        android:layout_marginVertical="35dp"
         android:layout_marginEnd="8dp"
         android:layout_toEndOf="@id/lin"
-        android:background="@color/white"
-        android:gravity="center"
-        android:text="Color code"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        app:cardCornerRadius="0dp"
+        app:cardElevation="0dp"
+        app:strokeColor="@color/black" />
 
     <com.google.android.material.button.MaterialButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/btnOk"
+        android:layout_width="75dp"
+        android:layout_height="42dp"
         android:layout_above="@id/btnCancel"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="8dp"
         android:backgroundTint="@android:color/transparent"
         android:text="OK"
         android:textColor="#FFFFFF"
-        android:textSize="19sp"
-        android:textStyle="bold"
-        app:cornerRadius="10dp"
-        app:strokeColor="#FFFFFF"
-        app:strokeWidth="2dp" />
+        android:textSize="14sp"
+        app:cornerRadius="0dp"
+        app:strokeWidth="0dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="95dp"
+        android:layout_height="42dp"
         android:layout_alignBottom="@id/lin"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="10dp"
         android:backgroundTint="@android:color/transparent"
         android:text="Cancel"
         android:textColor="#FFFFFF"
-        android:textSize="19sp"
-        android:textStyle="bold"
-        app:cornerRadius="10dp"
-        app:strokeColor="#FFFFFF"
-        app:strokeWidth="2dp" />
+        android:textSize="14sp"
+        app:cornerRadius="0dp"
+        app:strokeWidth="0dp" />
 </RelativeLayout>

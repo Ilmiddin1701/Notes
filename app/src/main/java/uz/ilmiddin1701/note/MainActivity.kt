@@ -1,5 +1,6 @@
 package uz.ilmiddin1701.note
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
@@ -15,6 +16,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import uz.ilmiddin1701.note.databinding.ActivityMainBinding
 import uz.ilmiddin1701.note.utils.MyData
+import uz.ilmiddin1701.note.utils.MySharedPreferences
 
 class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
@@ -24,6 +26,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
+        MySharedPreferences.init(this)
+        if (MySharedPreferences.statusBarColor != "empty") {
+            window.statusBarColor = Color.parseColor(MySharedPreferences.statusBarColor)
+        } else {
+            window.statusBarColor = Color.parseColor("#00558A")
+        }
         binding.apply {
             navHostFragment = supportFragmentManager.findFragmentById(R.id.my_navigation_host) as NavHostFragment
             val navController = navHostFragment.navController

@@ -1,20 +1,18 @@
 package uz.ilmiddin1701.note.fragments
 
-import android.animation.ArgbEvaluator
-import android.animation.ValueAnimator
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import uz.ilmiddin1701.note.R
 import uz.ilmiddin1701.note.adapters.NotesAdapter
 import uz.ilmiddin1701.note.databinding.FragmentHomeBinding
 import uz.ilmiddin1701.note.models.NoteData
+import uz.ilmiddin1701.note.utils.MyData
 
 class HomeFragment : Fragment(), NotesAdapter.NotesActionListener {
     private val binding by lazy { FragmentHomeBinding.inflate(layoutInflater) }
@@ -82,18 +80,7 @@ class HomeFragment : Fragment(), NotesAdapter.NotesActionListener {
     }
 
     override fun onNoteClick(noteData: NoteData, position: Int) {
-//        findNavController().navigate(R.id.showFragment)
-//        MyData.noteClick.postValue(true)
-
-        val colorFrom = Color.parseColor("#096EB4")
-        val colorTo = ContextCompat.getColor(requireContext(), R.color.red)
-
-        val colorAnimation = ValueAnimator.ofArgb(colorFrom, colorTo)
-        colorAnimation.duration = 2000 // 1 soniya davomida animatsiya
-        colorAnimation.addUpdateListener { animator ->
-            requireActivity().window.statusBarColor = animator.animatedValue as Int
-            requireActivity().findViewById<LinearLayout>(R.id.bottomLinear).setBackgroundColor(animator.animatedValue as Int)
-        }
-        colorAnimation.start()
+        findNavController().navigate(R.id.showFragment)
+        MyData.noteClick.postValue(true)
     }
 }

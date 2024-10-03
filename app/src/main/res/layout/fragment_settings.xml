@@ -3,13 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#F0F8FF"
     android:orientation="vertical"
     tools:context=".fragments.SettingsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
+        android:layout_height="60dp"
         android:background="@color/blue"
         android:orientation="horizontal">
 
@@ -20,6 +21,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginHorizontal="12dp"
             android:contentDescription="@string/btn_back"
+            android:padding="3dp"
             android:src="@drawable/ic_back" />
 
         <TextView
@@ -29,7 +31,7 @@
             android:gravity="center_vertical"
             android:text="@string/settings"
             android:textColor="@color/white"
-            android:textSize="25sp" />
+            android:textSize="22sp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -38,6 +40,56 @@
             android:paddingHorizontal="12dp"
             android:text="@string/save"
             android:textColor="@color/white"
-            android:textSize="22sp" />
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:text="Status Bar Color"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/statusBarColorView"
+            android:layout_width="80dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="10dp"
+            app:cardCornerRadius="5dp"
+            app:strokeColor="@color/black" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:text="Bottom Navigation Bar Color"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/bottomNavigationBarColorView"
+            android:layout_width="80dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="10dp"
+            app:cardCornerRadius="5dp"
+            app:strokeColor="@color/black" />
     </LinearLayout>
 </LinearLayout>
