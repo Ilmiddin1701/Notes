@@ -40,6 +40,20 @@ class MainActivity : AppCompatActivity() {
             val bottomNavExitAnim = AnimationUtils.loadAnimation(this@MainActivity, R.anim.bottom_nav_exit)
             val bottomNavEnterAnim = AnimationUtils.loadAnimation(this@MainActivity, R.anim.bottom_nav_enter)
 
+            when (MySharedPreferences.bottomNavBarColor) {
+                0 -> bottomLinear.setBackgroundResource(R.drawable.bottom_style)
+                1 -> bottomLinear.setBackgroundResource(R.drawable.bottom_style)
+                2 -> bottomLinear.setBackgroundResource(R.drawable.bottom_style_2)
+                3 -> bottomLinear.setBackgroundResource(R.drawable.bottom_style_3)
+                4 -> bottomLinear.setBackgroundResource(R.drawable.bottom_style_4)
+                5 -> bottomLinear.setBackgroundResource(R.drawable.bottom_style_5)
+                6 -> bottomLinear.setBackgroundResource(R.drawable.bottom_style_6)
+                7 -> bottomLinear.setBackgroundResource(R.drawable.bottom_style_7)
+                8 -> bottomLinear.setBackgroundResource(R.drawable.bottom_style_8)
+                9 -> bottomLinear.setBackgroundResource(R.drawable.bottom_style_9)
+                10 -> bottomLinear.setBackgroundResource(R.drawable.bottom_style_10)
+            }
+
             MyData.noteClick.observe(this@MainActivity) {
                 if (it) {
                     bottomLinear.startAnimation(bottomNavExitAnim)

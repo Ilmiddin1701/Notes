@@ -25,9 +25,15 @@ object MySharedPreferences {
             it.putString("keyStatusBarColor", value)
         }
 
-    var bottomNavigationBarColor: String
-        get() = preferences.getString("keyBottomNavigationBarColor", "empty")!!
+    var bottomNavBarColor:Int
+        get() = preferences.getInt("keyBottomNavBar", 0)
+        set(value) = preferences.edit{
+            it.putInt("keyBottomNavBar", value)
+        }
+
+    var backgroundColor: String
+        get() = preferences.getString("keyBackgroundColor", "empty")!!
         set(value) = preferences.edit {
-            it.putString("keyBottomNavigationBarColor", value)
+            it.putString("keyBackgroundColor", value)
         }
 }
