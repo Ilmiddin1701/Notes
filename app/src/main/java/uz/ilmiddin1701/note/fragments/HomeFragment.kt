@@ -1,5 +1,6 @@
 package uz.ilmiddin1701.note.fragments
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import uz.ilmiddin1701.note.adapters.NotesAdapter
 import uz.ilmiddin1701.note.databinding.FragmentHomeBinding
 import uz.ilmiddin1701.note.models.NoteData
 import uz.ilmiddin1701.note.utils.MyData
+import uz.ilmiddin1701.note.utils.MySharedPreferences
 
 class HomeFragment : Fragment(), NotesAdapter.NotesActionListener {
     private val binding by lazy { FragmentHomeBinding.inflate(layoutInflater) }
@@ -58,6 +60,10 @@ class HomeFragment : Fragment(), NotesAdapter.NotesActionListener {
                 "\n" +
                 "M.dan foydalanish mehnatning maz-muni va tarzini oʻzgartirish, xalq xujaligining barcha tarmoqlarida mehnatning darajasini bir-biriga yaqinlashtirish va rivojlantirish, ish unumdorligini oshirish va shu asosda yuqori iqtisodiy samaradorlikka erishish, mehnatni mashaqqatli va zerikarli gomushdan ishtiyoq bilan bajariladigan ehtiyojga aylantirishning asosi hisoblanadi.", "01.01.2024", "00 : 00"))
         binding.apply {
+            //Background Color
+            if (MySharedPreferences.backgroundColor != "empty") {
+                binding.root.setBackgroundColor(Color.parseColor(MySharedPreferences.backgroundColor))
+            } else binding.root.setBackgroundColor(Color.parseColor("#F0F8FF"))
 
             val drawable = edtSearch.compoundDrawablesRelative[2] // `drawableEnd` ni olish
             drawable?.setTint(ContextCompat.getColor(requireContext(), R.color.yellow)) // yangi rangni o'rnatish

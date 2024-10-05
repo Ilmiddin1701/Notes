@@ -33,6 +33,11 @@ class MainActivity : AppCompatActivity() {
             window.statusBarColor = Color.parseColor("#00558A")
         }
         binding.apply {
+            //Background Color
+            if (MySharedPreferences.backgroundColor != "empty") {
+                binding.root.setBackgroundColor(Color.parseColor(MySharedPreferences.backgroundColor))
+            } else binding.root.setBackgroundColor(Color.parseColor("#F0F8FF"))
+
             navHostFragment = supportFragmentManager.findFragmentById(R.id.my_navigation_host) as NavHostFragment
             val navController = navHostFragment.navController
             bottomNavigationView.setupWithNavController(navController)

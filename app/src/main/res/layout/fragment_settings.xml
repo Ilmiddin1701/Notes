@@ -38,227 +38,244 @@
             app:drawableEndCompat="@drawable/ic_save" />
     </LinearLayout>
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/statusBarColorChange"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginHorizontal="5dp"
-        android:layout_marginTop="10dp"
-        android:backgroundTint="@color/white"
-        app:cardCornerRadius="8dp"
-        app:strokeColor="@color/black">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_weight="1"
-                android:text="Status Bar Color"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/statusBarColorView"
-                android:layout_width="65dp"
-                android:layout_height="33dp"
-                android:layout_marginEnd="10dp"
-                app:cardCornerRadius="5dp"
-                app:strokeColor="@color/black" />
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/bottomNavBarColorChange"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="5dp"
-        android:layout_marginTop="10dp"
-        android:backgroundTint="@color/white"
-        android:minHeight="50dp"
-        app:cardCornerRadius="8dp"
-        app:strokeColor="@color/black">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/statusBarColorChange"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_weight="1"
-                    android:text="Bottom Navigation Bar Color"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
-
-                <View
-                    android:id="@+id/bottomNavBarColorView"
-                    android:layout_width="65dp"
-                    android:layout_height="33dp"
-                    android:layout_marginEnd="10dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/colorsVisibility"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/white"
+                app:cardCornerRadius="8dp"
+                app:strokeColor="@color/black">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="5dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <View
-                        android:id="@+id/style_1"
+                    <TextView
                         android:layout_width="0dp"
-                        android:layout_height="37dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:layout_marginEnd="5dp"
                         android:layout_weight="1"
-                        android:background="@drawable/bottom_style" />
+                        android:text="Status Bar Color"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
 
-                    <View
-                        android:id="@+id/style_2"
-                        android:layout_width="0dp"
-                        android:layout_height="37dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/bottom_style_2" />
-
-                    <View
-                        android:id="@+id/style_3"
-                        android:layout_width="0dp"
-                        android:layout_height="37dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/bottom_style_3" />
-
-                    <View
-                        android:id="@+id/style_4"
-                        android:layout_width="0dp"
-                        android:layout_height="37dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/bottom_style_4" />
-
-                    <View
-                        android:id="@+id/style_5"
-                        android:layout_width="0dp"
-                        android:layout_height="37dp"
-                        android:layout_marginStart="5dp"
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/statusBarColorView"
+                        android:layout_width="65dp"
+                        android:layout_height="33dp"
                         android:layout_marginEnd="10dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/bottom_style_5" />
+                        app:cardCornerRadius="5dp"
+                        app:strokeColor="@color/black" />
                 </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="10dp"
-                    android:orientation="horizontal">
-
-                    <View
-                        android:id="@+id/style_6"
-                        android:layout_width="0dp"
-                        android:layout_height="37dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/bottom_style_6" />
-
-                    <View
-                        android:id="@+id/style_7"
-                        android:layout_width="0dp"
-                        android:layout_height="37dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/bottom_style_7" />
-
-                    <View
-                        android:id="@+id/style_8"
-                        android:layout_width="0dp"
-                        android:layout_height="37dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/bottom_style_8" />
-
-                    <View
-                        android:id="@+id/style_9"
-                        android:layout_width="0dp"
-                        android:layout_height="37dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/bottom_style_9" />
-
-                    <View
-                        android:id="@+id/style_10"
-                        android:layout_width="0dp"
-                        android:layout_height="37dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/bottom_style_10" />
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/backgroundColorChange"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginHorizontal="5dp"
-        android:layout_marginTop="10dp"
-        android:backgroundTint="@color/white"
-        app:cardCornerRadius="8dp"
-        app:strokeColor="@color/black">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_weight="1"
-                android:text="Background Color"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
+            </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/backgroundColorView"
-                android:layout_width="65dp"
-                android:layout_height="33dp"
-                android:layout_marginEnd="10dp"
-                app:cardCornerRadius="5dp"
-                app:strokeColor="@color/black" />
+                android:id="@+id/bottomNavBarColorChange"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/white"
+                android:minHeight="50dp"
+                app:cardCornerRadius="8dp"
+                app:strokeColor="@color/black">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:text="Bottom Navigation Bar Color"
+                            android:textColor="@color/black"
+                            android:textSize="18sp" />
+
+                        <View
+                            android:id="@+id/bottomNavBarColorView"
+                            android:layout_width="65dp"
+                            android:layout_height="33dp"
+                            android:layout_marginEnd="10dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/colorsVisibility"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="5dp"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:id="@+id/style_1"
+                                android:layout_width="0dp"
+                                android:layout_height="37dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="5dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/bottom_style" />
+
+                            <View
+                                android:id="@+id/style_2"
+                                android:layout_width="0dp"
+                                android:layout_height="37dp"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginEnd="5dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/bottom_style_2" />
+
+                            <View
+                                android:id="@+id/style_3"
+                                android:layout_width="0dp"
+                                android:layout_height="37dp"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginEnd="5dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/bottom_style_3" />
+
+                            <View
+                                android:id="@+id/style_4"
+                                android:layout_width="0dp"
+                                android:layout_height="37dp"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginEnd="5dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/bottom_style_4" />
+
+                            <View
+                                android:id="@+id/style_5"
+                                android:layout_width="0dp"
+                                android:layout_height="37dp"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/bottom_style_5" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="10dp"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:id="@+id/style_6"
+                                android:layout_width="0dp"
+                                android:layout_height="37dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="5dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/bottom_style_6" />
+
+                            <View
+                                android:id="@+id/style_7"
+                                android:layout_width="0dp"
+                                android:layout_height="37dp"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginEnd="5dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/bottom_style_7" />
+
+                            <View
+                                android:id="@+id/style_8"
+                                android:layout_width="0dp"
+                                android:layout_height="37dp"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginEnd="5dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/bottom_style_8" />
+
+                            <View
+                                android:id="@+id/style_9"
+                                android:layout_width="0dp"
+                                android:layout_height="37dp"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginEnd="5dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/bottom_style_9" />
+
+                            <View
+                                android:id="@+id/style_10"
+                                android:layout_width="0dp"
+                                android:layout_height="37dp"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/bottom_style_10" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/backgroundColorChange"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/white"
+                app:cardCornerRadius="8dp"
+                app:strokeColor="@color/black">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:text="Background Color"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/backgroundColorView"
+                        android:layout_width="65dp"
+                        android:layout_height="33dp"
+                        android:layout_marginEnd="10dp"
+                        app:cardCornerRadius="5dp"
+                        app:strokeColor="@color/black" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <View
+                android:id="@+id/visibilityView2"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:background="@android:color/transparent" />
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+    </ScrollView>
 </LinearLayout>

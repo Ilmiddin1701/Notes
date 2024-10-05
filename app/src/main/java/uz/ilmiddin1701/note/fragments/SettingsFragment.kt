@@ -179,8 +179,10 @@ class SettingsFragment : Fragment() {
             // Background Color Change
             backgroundColorChange.setOnClickListener { openColorPickerDialog(3) }
             if (MySharedPreferences.backgroundColor != "empty") {
+                binding.root.setBackgroundColor(Color.parseColor(MySharedPreferences.backgroundColor))
                 backgroundColorView.setCardBackgroundColor(Color.parseColor(MySharedPreferences.backgroundColor))
             } else {
+                binding.root.setBackgroundColor(Color.parseColor("#F0F8FF"))
                 backgroundColorView.setCardBackgroundColor(Color.parseColor("#F0F8FF"))
             }
 
@@ -255,6 +257,15 @@ class SettingsFragment : Fragment() {
                         override fun onAnimationRepeat(p0: Animation?) {}
                     })
                 }
+
+                //Background Color Change
+                if (backgroundColorSaver != MySharedPreferences.backgroundColor && backgroundColorSaver != "") {
+                    val fromColor = if (MySharedPreferences.backgroundColor != "empty") {
+                        Color.parseColor(MySharedPreferences.backgroundColor)
+                    } else Color.parseColor("#F0F8FF")
+                    animationColorChange(fromColor, Color.parseColor(backgroundColorSaver), 3)
+                    MySharedPreferences.backgroundColor = backgroundColorSaver
+                }
             }
         }
         return binding.root
@@ -295,10 +306,8 @@ class SettingsFragment : Fragment() {
                         dialog.cancel()
                     }
                     3 -> {
-
-                    }
-                    4 -> {
-
+                        backgroundColorSaver = c
+                        dialog.cancel()
                     }
                 }
             }
@@ -352,6 +361,10 @@ class SettingsFragment : Fragment() {
                     binding.statusBarColorView.setCardBackgroundColor(animator.animatedValue as Int)
                 }
                 2 -> binding.actionBar.setBackgroundColor(animator.animatedValue as Int)
+                3 -> {
+                    binding.backgroundColorView.setCardBackgroundColor(animator.animatedValue as Int)
+                    binding.root.setBackgroundColor(animator.animatedValue as Int)
+                }
             }
         }
         colorAnimation.start()
