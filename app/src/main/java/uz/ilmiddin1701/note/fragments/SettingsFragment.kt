@@ -303,10 +303,18 @@ class SettingsFragment : Fragment() {
                 when (n) {
                     1 -> {
                         statusBarColorSaver = c
+                        val colorFrom = if (MySharedPreferences.statusBarColor != "empty") {
+                            Color.parseColor(MySharedPreferences.statusBarColor)
+                        } else Color.parseColor("#00558A")
+                        animationColorChange(colorFrom, Color.parseColor(c), 0)
                         dialog.cancel()
                     }
                     3 -> {
                         backgroundColorSaver = c
+                        val colorFrom = if (MySharedPreferences.backgroundColor != "empty") {
+                            Color.parseColor(MySharedPreferences.backgroundColor)
+                        } else Color.parseColor("#F0F8FF")
+                        animationColorChange(colorFrom, Color.parseColor(c), 31)
                         dialog.cancel()
                     }
                 }
@@ -356,15 +364,11 @@ class SettingsFragment : Fragment() {
         colorAnimation.duration = 2000
         colorAnimation.addUpdateListener { animator ->
             when (q) {
-                1 -> {
-                    requireActivity().window.statusBarColor = animator.animatedValue as Int
-                    binding.statusBarColorView.setCardBackgroundColor(animator.animatedValue as Int)
-                }
+                0 -> binding.statusBarColorView.setCardBackgroundColor(animator.animatedValue as Int)
+                1 -> requireActivity().window.statusBarColor = animator.animatedValue as Int
                 2 -> binding.actionBar.setBackgroundColor(animator.animatedValue as Int)
-                3 -> {
-                    binding.backgroundColorView.setCardBackgroundColor(animator.animatedValue as Int)
-                    binding.root.setBackgroundColor(animator.animatedValue as Int)
-                }
+                3 -> binding.root.setBackgroundColor(animator.animatedValue as Int)
+                31 -> binding.backgroundColorView.setCardBackgroundColor(animator.animatedValue as Int)
             }
         }
         colorAnimation.start()

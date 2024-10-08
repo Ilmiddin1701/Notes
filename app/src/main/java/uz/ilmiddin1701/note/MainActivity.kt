@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -33,6 +34,11 @@ class MainActivity : AppCompatActivity() {
             window.statusBarColor = Color.parseColor("#00558A")
         }
         binding.apply {
+            ViewCompat.setOnApplyWindowInsetsListener(bottomLinear) { view, insets ->
+                val systemBarInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+                view.updatePadding(bottom = systemBarInsets.bottom)
+                insets
+            }
             //Background Color
             if (MySharedPreferences.backgroundColor != "empty") {
                 binding.root.setBackgroundColor(Color.parseColor(MySharedPreferences.backgroundColor))

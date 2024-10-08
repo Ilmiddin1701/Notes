@@ -83,6 +83,41 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/backgroundColorChange"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/white"
+                app:cardCornerRadius="8dp"
+                app:strokeColor="@color/black">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:text="Background Color"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/backgroundColorView"
+                        android:layout_width="65dp"
+                        android:layout_height="33dp"
+                        android:layout_marginEnd="10dp"
+                        app:cardCornerRadius="5dp"
+                        app:strokeColor="@color/black" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/bottomNavBarColorChange"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -233,41 +268,6 @@
                                 android:background="@drawable/bottom_style_10" />
                         </LinearLayout>
                     </LinearLayout>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/backgroundColorChange"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginHorizontal="5dp"
-                android:layout_marginTop="10dp"
-                android:backgroundTint="@color/white"
-                app:cardCornerRadius="8dp"
-                app:strokeColor="@color/black">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_weight="1"
-                        android:text="Background Color"
-                        android:textColor="@color/black"
-                        android:textSize="18sp" />
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/backgroundColorView"
-                        android:layout_width="65dp"
-                        android:layout_height="33dp"
-                        android:layout_marginEnd="10dp"
-                        app:cardCornerRadius="5dp"
-                        app:strokeColor="@color/black" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

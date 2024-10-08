@@ -1,6 +1,7 @@
 package uz.ilmiddin1701.note.adapters
 
 import android.graphics.Color
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +17,7 @@ class NotesAdapter(var notesActionListener: NotesActionListener, var list: Array
             itemNoteBinding.apply {
                 noteName.text = noteData.name
                 noteName.isSelected = true
-                noteTexts.text = noteData.text
+                noteTexts.text = Html.fromHtml(noteData.text, Html.FROM_HTML_MODE_COMPACT)
                 noteTime.text = noteData.time
                 root.setOnClickListener {
                     notesActionListener.onNoteClick(noteData, position)
@@ -32,16 +33,16 @@ class NotesAdapter(var notesActionListener: NotesActionListener, var list: Array
                     visibilityView2.visibility = View.GONE
                 }
                 noteData.apply {
-                    if (nameTextColor != null) {
+                    if (nameTextColor != "") {
                         noteName.setTextColor(Color.parseColor(noteData.nameTextColor))
                     }
-                    if (nameBackgroundColor != null) {
+                    if (nameBackgroundColor != "") {
                         noteName.setBackgroundColor(Color.parseColor(noteData.nameBackgroundColor))
                     }
-                    if (noteTextColor != null) {
+                    if (noteTextColor != "") {
                         noteName.setTextColor(Color.parseColor(noteData.noteTextColor))
                     }
-                    if (noteBackgroundColor != null) {
+                    if (noteBackgroundColor != "") {
                         noteName.setBackgroundColor(Color.parseColor(noteData.noteBackgroundColor))
                     }
                 }
