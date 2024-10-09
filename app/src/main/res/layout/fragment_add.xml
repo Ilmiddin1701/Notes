@@ -69,7 +69,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:gravity="center_vertical"
-            android:text="01.01.2024"
             android:textColor="@color/black" />
 
         <TextClock
@@ -77,7 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:format24Hour="hh:mm:ss"
+            android:format24Hour="HH:mm:ss"
             android:gravity="center_vertical"
             android:textColor="@color/black" />
 
@@ -123,62 +122,54 @@
             android:textSize="17sp" />
     </ScrollView>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/functionalCard"
+    <LinearLayout
+        android:id="@+id/functionalLinear"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:backgroundTint="@color/blue"
-        android:visibility="gone"
-        app:cardCornerRadius="0dp"
-        app:cardElevation="0dp">
+        android:background="@color/blue"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/btnVoice"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:paddingVertical="10dp"
+            android:src="@drawable/ic_voice" />
+
+        <ImageView
+            android:id="@+id/btnGallery"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:paddingVertical="12dp"
+            android:src="@drawable/ic_gallery" />
 
-            <ImageView
-                android:id="@+id/btnVoice"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:paddingVertical="10dp"
-                android:src="@drawable/ic_voice" />
+        <ImageView
+            android:id="@+id/btnMarker"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingVertical="10dp"
+            android:src="@drawable/ic_un_active_marker" />
 
-            <ImageView
-                android:id="@+id/btnGallery"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:paddingVertical="12dp"
-                android:src="@drawable/ic_gallery" />
+        <ImageView
+            android:id="@+id/btnBold"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingVertical="12dp"
+            android:src="@drawable/ic_un_active_bold" />
 
-
-            <ImageView
-                android:id="@+id/btnMarker"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:paddingVertical="10dp"
-                android:src="@drawable/ic_un_active_marker" />
-
-            <ImageView
-                android:id="@+id/btnBold"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:paddingVertical="12dp"
-                android:src="@drawable/ic_un_active_bold" />
-
-            <ImageView
-                android:id="@+id/btnItalic"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:paddingVertical="10dp"
-                android:src="@drawable/ic_un_active_italic" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+        <ImageView
+            android:id="@+id/btnItalic"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingVertical="10dp"
+            android:src="@drawable/ic_un_active_italic" />
+    </LinearLayout>
 </RelativeLayout>

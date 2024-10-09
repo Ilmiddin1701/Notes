@@ -53,8 +53,56 @@ class AddFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        MySharedPreferences.init(requireContext())
         myDbHelper = MyDbHelper(requireContext())
         binding.apply {
+            when (MySharedPreferences.bottomNavBarColor) {
+                0 -> {
+                    actionBar.setBackgroundColor(Color.parseColor("#096EB4"))
+                    functionalLinear.setBackgroundColor(Color.parseColor("#096EB4"))
+                }
+                1 -> {
+                    actionBar.setBackgroundColor(Color.parseColor("#096EB4"))
+                    functionalLinear.setBackgroundColor(Color.parseColor("#096EB4"))
+                }
+                2 -> {
+                    actionBar.setBackgroundColor(Color.parseColor("#673AB7"))
+                    functionalLinear.setBackgroundColor(Color.parseColor("#673AB7"))
+                }
+                3 -> {
+                    actionBar.setBackgroundColor(Color.parseColor("#FF5722"))
+                    functionalLinear.setBackgroundColor(Color.parseColor("#FF5722"))
+                }
+                4 -> {
+                    actionBar.setBackgroundColor(Color.parseColor("#FF9800"))
+                    functionalLinear.setBackgroundColor(Color.parseColor("#FF9800"))
+                }
+                5 -> {
+                    actionBar.setBackgroundColor(Color.parseColor("#E91E63"))
+                    functionalLinear.setBackgroundColor(Color.parseColor("#E91E63"))
+                }
+                6 -> {
+                    actionBar.setBackgroundColor(Color.parseColor("#009688"))
+                    functionalLinear.setBackgroundColor(Color.parseColor("#009688"))
+                }
+                7 -> {
+                    actionBar.setBackgroundColor(Color.parseColor("#4CAF50"))
+                    functionalLinear.setBackgroundColor(Color.parseColor("#4CAF50"))
+                }
+                8 -> {
+                    actionBar.setBackgroundColor(Color.parseColor("#363F5E"))
+                    functionalLinear.setBackgroundColor(Color.parseColor("#363F5E"))
+                }
+                9 -> {
+                    actionBar.setBackgroundColor(Color.parseColor("#457B9D"))
+                    functionalLinear.setBackgroundColor(Color.parseColor("#457B9D"))
+                }
+                10 -> {
+                    actionBar.setBackgroundColor(Color.parseColor("#B93E20"))
+                    functionalLinear.setBackgroundColor(Color.parseColor("#B93E20"))
+                }
+            }
+
             tvNoteDate.text = SimpleDateFormat("dd.MM.yyyy").format(Date())
 
             //Background Color
@@ -76,13 +124,13 @@ class AddFragment : Fragment() {
                 // Klaviatura ochilganini aniqlaymiz
                 if (keypadHeight > screenHeight * 0.15) {
                     // Klaviatura ochildi, CardView ni yuqoriga ko'taramiz
-                    functionalCard.animate()
+                    functionalLinear.animate()
                         .translationY(-keypadHeight.toFloat())
                         .setDuration(300)
                         .start()
                 } else {
                     // Klaviatura yopildi, CardView ni eski holatiga qaytaramiz
-                    functionalCard.animate()
+                    functionalLinear.animate()
                         .translationY(0f)
                         .setDuration(300)
                         .start()
@@ -94,9 +142,9 @@ class AddFragment : Fragment() {
             // EditText focus listener
             edtNoteText.setOnFocusChangeListener { view, hasFocus ->
                 if (hasFocus) {
-                    functionalCard.visibility = View.VISIBLE
+                    functionalLinear.visibility = View.VISIBLE
                 } else {
-                    functionalCard.visibility = View.GONE
+                    functionalLinear.visibility = View.GONE
                 }
             }
 

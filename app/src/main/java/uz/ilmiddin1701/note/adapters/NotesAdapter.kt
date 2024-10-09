@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import uz.ilmiddin1701.note.databinding.ItemNoteBinding
 import uz.ilmiddin1701.note.models.NoteData
+import uz.ilmiddin1701.note.utils.MySharedPreferences
 
 class NotesAdapter(var notesActionListener: NotesActionListener, var list: ArrayList<NoteData>) : Adapter<NotesAdapter.Vh>() {
 
@@ -27,24 +28,24 @@ class NotesAdapter(var notesActionListener: NotesActionListener, var list: Array
                 } else {
                     visibilityView1.visibility = View.GONE
                 }
-                if (position == list.size - 1 || position == list.size - 1) {
+                if (position == list.size || position == list.size - 1) {
                     visibilityView2.visibility = View.VISIBLE
                 } else {
                     visibilityView2.visibility = View.GONE
                 }
-                noteData.apply {
-                    if (nameTextColor != "") {
-                        noteName.setTextColor(Color.parseColor(noteData.nameTextColor))
-                    }
-                    if (nameBackgroundColor != "") {
-                        noteName.setBackgroundColor(Color.parseColor(noteData.nameBackgroundColor))
-                    }
-                    if (noteTextColor != "") {
-                        noteName.setTextColor(Color.parseColor(noteData.noteTextColor))
-                    }
-                    if (noteBackgroundColor != "") {
-                        noteName.setBackgroundColor(Color.parseColor(noteData.noteBackgroundColor))
-                    }
+                MySharedPreferences.init(itemNoteBinding.root.context)
+                when (MySharedPreferences.bottomNavBarColor) {
+                    0 -> noteName.setBackgroundColor(Color.parseColor("#096EB4"))
+                    1 -> noteName.setBackgroundColor(Color.parseColor("#096EB4"))
+                    2 -> noteName.setBackgroundColor(Color.parseColor("#673AB7"))
+                    3 -> noteName.setBackgroundColor(Color.parseColor("#FF5722"))
+                    4 -> noteName.setBackgroundColor(Color.parseColor("#FF9800"))
+                    5 -> noteName.setBackgroundColor(Color.parseColor("#E91E63"))
+                    6 -> noteName.setBackgroundColor(Color.parseColor("#009688"))
+                    7 -> noteName.setBackgroundColor(Color.parseColor("#4CAF50"))
+                    8 -> noteName.setBackgroundColor(Color.parseColor("#363F5E"))
+                    9 -> noteName.setBackgroundColor(Color.parseColor("#457B9D"))
+                    10 -> noteName.setBackgroundColor(Color.parseColor("#B93E20"))
                 }
             }
         }

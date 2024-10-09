@@ -34,8 +34,54 @@ class HomeFragment : Fragment(), NotesAdapter.NotesActionListener {
                 binding.root.setBackgroundColor(Color.parseColor(MySharedPreferences.backgroundColor))
             } else binding.root.setBackgroundColor(Color.parseColor("#F0F8FF"))
 
+
             val drawable = edtSearch.compoundDrawablesRelative[2] // `drawableEnd` ni olish
-            drawable?.setTint(ContextCompat.getColor(requireContext(), R.color.yellow)) // yangi rangni o'rnatish
+            when (MySharedPreferences.bottomNavBarColor) {
+                0 -> {
+                    drawable?.setTint(Color.parseColor("#096EB4"))
+                    searchCard.strokeColor = Color.parseColor("#096EB4")
+                }
+                1 -> {
+                    drawable?.setTint(Color.parseColor("#096EB4"))
+                    searchCard.strokeColor = Color.parseColor("#096EB4")
+                }
+                2 -> {
+                    drawable?.setTint(Color.parseColor("#673AB7"))
+                    searchCard.strokeColor = Color.parseColor("#673AB7")
+                }
+                3 -> {
+                    drawable?.setTint(Color.parseColor("#FF5722"))
+                    searchCard.strokeColor = Color.parseColor("#FF5722")
+                }
+                4 -> {
+                    drawable?.setTint(Color.parseColor("#FF9800"))
+                    searchCard.strokeColor = Color.parseColor("#FF9800")
+                }
+                5 -> {
+                    drawable?.setTint(Color.parseColor("#E91E63"))
+                    searchCard.strokeColor = Color.parseColor("#E91E63")
+                }
+                6 -> {
+                    drawable?.setTint(Color.parseColor("#009688"))
+                    searchCard.strokeColor = Color.parseColor("#009688")
+                }
+                7 -> {
+                    drawable?.setTint(Color.parseColor("#4CAF50"))
+                    searchCard.strokeColor = Color.parseColor("#4CAF50")
+                }
+                8 -> {
+                    drawable?.setTint(Color.parseColor("#363F5E"))
+                    searchCard.strokeColor = Color.parseColor("#363F5E")
+                }
+                9 -> {
+                    drawable?.setTint(Color.parseColor("#457B9D"))
+                    searchCard.strokeColor = Color.parseColor("#457B9D")
+                }
+                10 -> {
+                    drawable?.setTint(Color.parseColor("#B93E20"))
+                    searchCard.strokeColor = Color.parseColor("#B93E20")
+                }
+            }
 
             val notesList = ArrayList<NoteData>()
             notesList.addAll(myDbHelper.showNotes())
