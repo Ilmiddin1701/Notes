@@ -2,7 +2,6 @@ package uz.ilmiddin1701.note.fragments
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.ContentProvider
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -15,22 +14,16 @@ import android.os.Vibrator
 import android.text.Editable
 import android.text.Html
 import android.text.Spannable
-import android.text.SpannableStringBuilder
 import android.text.TextWatcher
 import android.text.style.BackgroundColorSpan
 import android.text.style.StyleSpan
-import android.view.ActionMode
-import android.view.KeyEvent
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
-import android.widget.VideoView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -42,7 +35,6 @@ import uz.ilmiddin1701.note.adapters.ImagesAdapter
 import uz.ilmiddin1701.note.databinding.FragmentAddBinding
 import uz.ilmiddin1701.note.db.MyDbHelper
 import uz.ilmiddin1701.note.models.NoteData
-import uz.ilmiddin1701.note.utils.MyData
 import uz.ilmiddin1701.note.utils.MySharedPreferences
 import java.io.File
 import java.io.FileOutputStream
