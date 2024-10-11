@@ -65,6 +65,7 @@ class AddFragment : Fragment(), ImagesAdapter.ImageClickAction {
         MySharedPreferences.init(requireContext())
         myDbHelper = MyDbHelper(requireContext())
         binding.apply {
+            btnBack.setOnClickListener { findNavController().popBackStack() }
             when (MySharedPreferences.bottomNavBarColor) {
                 0 -> {
                     btnHideShow.setBackgroundResource(R.drawable.bottom_style)
@@ -175,11 +176,9 @@ class AddFragment : Fragment(), ImagesAdapter.ImageClickAction {
                 if (hasFocus) {
                     functionalLinear.visibility = View.VISIBLE
                 } else {
-                    functionalLinear.visibility = View.GONE
+                    functionalLinear.visibility = View.INVISIBLE
                 }
             }
-
-            btnBack.setOnClickListener { findNavController().popBackStack() }
 
             btnItalic.setOnClickListener {
                 if (italicStyle) {
@@ -216,6 +215,42 @@ class AddFragment : Fragment(), ImagesAdapter.ImageClickAction {
 
             btnGallery.setOnClickListener {
                 loadImageFromExternalStorage.launch("image/*")
+            }
+
+            val imagesRvCloseAnim = AnimationUtils.loadAnimation(context, R.anim.images_rv_close_anim)
+            val imagesRvOpenAnim = AnimationUtils.loadAnimation(context, R.anim.images_rv_open_anim)
+            val btnHideShowDownAnim = AnimationUtils.loadAnimation(context, R.anim.btn_hide_show_down_anim)
+            val btnHideShowUpAnim = AnimationUtils.loadAnimation(context, R.anim.btn_hide_show_up_anim)
+
+            var checkedHideShow = true
+            btnHideShow.setOnClickListener {
+                if (checkedHideShow) {
+                    checkedHideShow = false
+                    linRecycler.startAnimation(imagesRvCloseAnim)
+                    btnHideShow.startAnimation(btnHideShowDownAnim)
+                    imagesRvCloseAnim.setAnimationListener(object : AnimationListener {
+                        override fun onAnimationStart(p0: Animation?) {}
+                        override fun onAnimationEnd(p0: Animation?) {
+                            linRecycler.visibility = View.GONE
+                            btnHideShow.setImageResource(R.drawable.ic_up)
+                        }
+                        override fun onAnimationRepeat(p0: Animation?) {}
+                    })
+
+                } else {
+                    checkedHideShow = true
+                    linRecycler.startAnimation(imagesRvOpenAnim)
+                    btnHideShow.startAnimation(btnHideShowUpAnim)
+                    imagesRvOpenAnim.setAnimationListener(object : AnimationListener {
+                        override fun onAnimationStart(p0: Animation?) {
+                            linRecycler.visibility= View.VISIBLE
+                        }
+                        override fun onAnimationEnd(p0: Animation?) {
+                            btnHideShow.setImageResource(R.drawable.ic_x)
+                        }
+                        override fun onAnimationRepeat(p0: Animation?) {}
+                    })
+                }
             }
 
             // Matn qo'shilayotganda stilni tekshiramiz va qo'llaymiz
