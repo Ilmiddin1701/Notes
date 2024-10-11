@@ -63,12 +63,20 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tvNoteDateTime"
+            android:id="@+id/tvNoteDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:gravity="center_vertical"
-            android:text="01.01.2024  00:00"
+            android:textColor="@color/black" />
+
+        <TextClock
+            android:id="@+id/tvNoteTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:format24Hour="HH:mm:ss"
+            android:gravity="center_vertical"
             android:textColor="@color/black" />
 
         <View
@@ -90,9 +98,11 @@
     </LinearLayout>
 
     <ScrollView
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/lin"
+        android:layout_marginTop="4dp"
         android:fillViewport="true">
 
         <EditText
@@ -106,68 +116,98 @@
             android:inputType="textCapSentences|textMultiLine"
             android:paddingHorizontal="15dp"
             android:paddingTop="15dp"
-            android:paddingBottom="75dp"
+            android:paddingBottom="60dp"
             android:textColor="@color/black"
             android:textColorHint="#808080"
             android:textSize="17sp" />
     </ScrollView>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/functionalCard"
+    <RelativeLayout
+        android:id="@+id/imagesRelative"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/functionalLinear"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/btnHideShow"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/bottom_style"
+            android:contentDescription="@string/hide_show"
+            android:padding="5dp"
+            android:src="@drawable/ic_x" />
+
+        <LinearLayout
+            android:id="@+id/linRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btnHideShow"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/images_linear_style">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvImages"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:spanCount="4"
+                tools:listitem="@layout/item_images" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/functionalLinear"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:backgroundTint="@color/blue"
-        android:visibility="visible"
-        app:cardCornerRadius="0dp"
-        app:cardElevation="0dp">
+        android:background="@color/blue"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="visible">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/btnVoice"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:paddingVertical="10dp"
+            android:src="@drawable/ic_voice" />
+
+        <ImageView
+            android:id="@+id/btnGallery"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:paddingVertical="12dp"
+            android:src="@drawable/ic_gallery" />
 
-            <ImageView
-                android:id="@+id/btnVoice"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:paddingVertical="10dp"
-                android:src="@drawable/ic_voice" />
+        <ImageView
+            android:id="@+id/btnMarker"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingVertical="10dp"
+            android:src="@drawable/ic_un_active_marker" />
 
-            <ImageView
-                android:id="@+id/btnGallery"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:paddingVertical="12dp"
-                android:src="@drawable/ic_gallery" />
+        <ImageView
+            android:id="@+id/btnBold"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingVertical="12dp"
+            android:src="@drawable/ic_un_active_bold" />
 
-
-            <ImageView
-                android:id="@+id/btnMarker"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:paddingVertical="10dp"
-                android:src="@drawable/ic_un_active_marker" />
-
-            <ImageView
-                android:id="@+id/btnBold"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:paddingVertical="12dp"
-                android:src="@drawable/ic_un_active_bold" />
-
-            <ImageView
-                android:id="@+id/btnItalic"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:paddingVertical="10dp"
-                android:src="@drawable/ic_un_active_italic" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+        <ImageView
+            android:id="@+id/btnItalic"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingVertical="10dp"
+            android:src="@drawable/ic_un_active_italic" />
+    </LinearLayout>
 </RelativeLayout>

@@ -19,19 +19,15 @@ class MyDbHelper(var context: Context) : SQLiteOpenHelper(context, DB_NAME, null
         const val TEXT = "text"
         const val DATE = "date"
         const val TIME = "time"
-        const val NAME_COLOR = "nameTextColor"
-        const val NAME_BACK_COLOR = "nameBackgroundColor"
-        const val NOTE_COLOR = "noteTextColor"
-        const val NOTE_BACK_COLOR = "noteBackgroundColor"
+        const val IMAGES = "images"
     }
 
     override fun onCreate(p0: SQLiteDatabase?) {
         val query = "create table $TABLE_NAME (" +
-                    "$ID integer not null primary key autoincrement unique, " +
-                    "$NAME text not null, $TEXT text not null, " +
-                    "$DATE text not null, $TIME text not null, " +
-                    "$NAME_COLOR text not null, $NAME_BACK_COLOR text not null, " +
-                    "$NOTE_COLOR text not null, $NOTE_BACK_COLOR text not null)"
+                "$ID integer not null primary key autoincrement unique, " +
+                "$NAME text not null, $TEXT text not null, " +
+                "$DATE text not null, $TIME text not null, " +
+                "$IMAGES text not null)"
         p0?.execSQL(query)
     }
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {}
@@ -43,10 +39,7 @@ class MyDbHelper(var context: Context) : SQLiteOpenHelper(context, DB_NAME, null
         contentValues.put(TEXT, noteData.text)
         contentValues.put(DATE, noteData.date)
         contentValues.put(TIME, noteData.time)
-        contentValues.put(NAME_COLOR, noteData.nameTextColor)
-        contentValues.put(NAME_BACK_COLOR, noteData.nameBackgroundColor)
-        contentValues.put(NOTE_COLOR, noteData.noteTextColor)
-        contentValues.put(NOTE_BACK_COLOR, noteData.noteBackgroundColor)
+        contentValues.put(IMAGES, noteData.images)
         database.insert(TABLE_NAME, null, contentValues)
         database.close()
     }
@@ -64,14 +57,12 @@ class MyDbHelper(var context: Context) : SQLiteOpenHelper(context, DB_NAME, null
         if (cursor.moveToFirst()) {
             do {
                 val noteData = NoteData(
+                    cursor.getInt(0),
                     cursor.getString(1),
                     cursor.getString(2),
                     cursor.getString(3),
                     cursor.getString(4),
-                    cursor.getString(5),
-                    cursor.getString(6),
-                    cursor.getString(7),
-                    cursor.getString(8)
+                    cursor.getString(5)
                 )
                 list.add(noteData)
             }while (cursor.moveToNext())

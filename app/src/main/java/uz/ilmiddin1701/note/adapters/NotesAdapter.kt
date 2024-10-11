@@ -14,14 +14,14 @@ import uz.ilmiddin1701.note.utils.MySharedPreferences
 class NotesAdapter(var notesActionListener: NotesActionListener, var list: ArrayList<NoteData>) : Adapter<NotesAdapter.Vh>() {
 
     inner class Vh(var itemNoteBinding: ItemNoteBinding) : ViewHolder(itemNoteBinding.root) {
-        fun onBind(noteData: NoteData, position: Int) {
+        fun onBind(noteData: NoteData) {
             itemNoteBinding.apply {
                 noteName.text = noteData.name
                 noteName.isSelected = true
                 noteTexts.text = Html.fromHtml(noteData.text, Html.FROM_HTML_MODE_COMPACT)
                 noteTime.text = noteData.time
                 root.setOnClickListener {
-                    notesActionListener.onNoteClick(noteData, position)
+                    notesActionListener.onNoteClick(noteData)
                 }
                 if (position == 0 || position == 1) {
                     visibilityView1.visibility = View.VISIBLE
@@ -58,10 +58,10 @@ class NotesAdapter(var notesActionListener: NotesActionListener, var list: Array
     override fun getItemCount(): Int = list.size
 
     override fun onBindViewHolder(holder: Vh, position: Int) {
-        holder.onBind(list[position], position)
+        holder.onBind(list[position])
     }
 
     interface NotesActionListener {
-        fun onNoteClick(noteData: NoteData, position: Int)
+        fun onNoteClick(noteData: NoteData)
     }
 }

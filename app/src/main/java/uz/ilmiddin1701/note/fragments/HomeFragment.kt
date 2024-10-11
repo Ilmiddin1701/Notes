@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -15,7 +15,6 @@ import uz.ilmiddin1701.note.adapters.NotesAdapter
 import uz.ilmiddin1701.note.databinding.FragmentHomeBinding
 import uz.ilmiddin1701.note.db.MyDbHelper
 import uz.ilmiddin1701.note.models.NoteData
-import uz.ilmiddin1701.note.utils.MyData
 import uz.ilmiddin1701.note.utils.MySharedPreferences
 
 class HomeFragment : Fragment(), NotesAdapter.NotesActionListener {
@@ -102,8 +101,7 @@ class HomeFragment : Fragment(), NotesAdapter.NotesActionListener {
         return binding.root
     }
 
-    override fun onNoteClick(noteData: NoteData, position: Int) {
-        findNavController().navigate(R.id.showFragment)
-        MyData.noteClick.postValue(true)
+    override fun onNoteClick(noteData: NoteData) {
+        findNavController().navigate(R.id.showFragment, bundleOf("keyNoteData" to noteData))
     }
 }
