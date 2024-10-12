@@ -4,9 +4,12 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.Typeface
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
@@ -30,6 +33,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import uz.ilmiddin1701.note.MainActivity
 import uz.ilmiddin1701.note.R
 import uz.ilmiddin1701.note.adapters.ImagesAdapter
 import uz.ilmiddin1701.note.databinding.FragmentAddBinding
@@ -302,20 +306,60 @@ class AddFragment : Fragment(), ImagesAdapter.ImageClickAction {
         return binding.root
     }
 
-    private val loadImageFromExternalStorage = registerForActivityResult(ActivityResultContracts.GetContent()) {
-        it ?: return@registerForActivityResult
-        imagesList.add(it.toString())
+    fun decodeSampledBitmapFromUri(uri: Uri, reqWidth: Int, reqHeight: Int, context: Context): Bitmap? {
+        val options = BitmapFactory.Options()
+        options.inJustDecodeBounds = true
+
+        // Rasmning o'lchamlarini aniqlash (bitta o'lchamli yuklash)
+        val inputStream = context.contentResolver.openInputStream(uri)
+        BitmapFactory.decodeStream(inputStream, null, options)
+        inputStream?.close()
+
+        // Rasm o'lchamlarini kerakli o'lchamlarga moslashtirish
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight)
+        options.inJustDecodeBounds = false
+
+        // Rasmni optimallashtirilgan o'lchamda yuklash
+        val inputStream2 = context.contentResolver.openInputStream(uri)
+        val bitmap = BitmapFactory.decodeStream(inputStream2, null, options)
+        inputStream2?.close()
+
+        return bitmap
+    }
+
+    fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int {
+        val (height: Int, width: Int) = options.outHeight to options.outWidth
+        var inSampleSize = 1
+
+        if (height > reqHeight || width > reqWidth) {
+            val halfHeight: Int = height / 2
+            val halfWidth: Int = width / 2
+
+            while (halfHeight / inSampleSize >= reqHeight && halfWidth / inSampleSize >= reqWidth) {
+                inSampleSize *= 2
+            }
+        }
+
+        return inSampleSize
+    }
+
+    private val loadImageFromExternalStorage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uri ?: return@registerForActivityResult
+        // Rasmni listga qo'shish va ko'rsatish
+        imagesList.add(uri.toString())
         imagesAdapter = ImagesAdapter(imagesList, this)
         binding.rvImages.adapter = imagesAdapter
         binding.imagesRelative.visibility = View.VISIBLE
 
-        val inputStream = requireActivity().contentResolver?.openInputStream(it)
-        val file = File(requireActivity().filesDir, "IMG_${UUID.randomUUID()}.jpg")
-        val fileOutputStream = FileOutputStream(file)
-        inputStream?.copyTo(fileOutputStream)
-        inputStream?.close()
-        fileOutputStream.close()
-        imagesString += file.absolutePath + ","
+        // Optimallashtirilgan rasm yuklash
+        val bitmap = decodeSampledBitmapFromUri(uri, 1024, 1024, requireContext())
+        bitmap?.let {
+            val file = File(requireActivity().filesDir, "IMG_${UUID.randomUUID()}.jpg")
+            val fileOutputStream = FileOutputStream(file)
+            it.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream) // Rasmni JPEG formatida saqlash
+            fileOutputStream.close()
+            imagesString += file.absolutePath + ","
+        }
     }
 
     override fun imageClick(image: String, position: Int) {

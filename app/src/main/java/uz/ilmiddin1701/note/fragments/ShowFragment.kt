@@ -91,15 +91,6 @@ class ShowFragment : Fragment(), ImagesAdapter.ImageClickAction {
             val imagesRvOpenAnim = AnimationUtils.loadAnimation(context, R.anim.images_rv_open_anim)
             val btnHideShowDownAnim = AnimationUtils.loadAnimation(context, R.anim.btn_hide_show_down_anim)
             val btnHideShowUpAnim = AnimationUtils.loadAnimation(context, R.anim.btn_hide_show_up_anim)
-            if (loadedNote.images != "") {
-                imagesRelative.visibility = View.VISIBLE
-                val imageArray = loadedNote.images!!.split(",").filter { it.isNotEmpty() }
-                imagesAdapter = ImagesAdapter(imageArray as ArrayList<String>, this@ShowFragment)
-                rvImages.adapter = imagesAdapter
-                linRecycler.visibility = View.VISIBLE
-                linRecycler.startAnimation(imagesRvOpenAnim)
-                btnHideShow.startAnimation(btnHideShowUpAnim)
-            }
             var checkedHideShow = true
             btnHideShow.setOnClickListener {
                 if (checkedHideShow) {
@@ -135,6 +126,15 @@ class ShowFragment : Fragment(), ImagesAdapter.ImageClickAction {
             edtNoteText.setText(Html.fromHtml(loadedNote.text, Html.FROM_HTML_MODE_COMPACT).trim())
             tvNoteDate.text = loadedNote.date
             tvSymbol.text = edtNoteText.text.length.toString() + " symbols"
+            if (loadedNote.images != "") {
+                imagesRelative.visibility = View.VISIBLE
+                val imageArray = loadedNote.images!!.split(",").filter { it.isNotEmpty() }
+                imagesAdapter = ImagesAdapter(imageArray as ArrayList<String>, this@ShowFragment)
+                rvImages.adapter = imagesAdapter
+                linRecycler.visibility = View.VISIBLE
+                linRecycler.startAnimation(imagesRvOpenAnim)
+                btnHideShow.startAnimation(btnHideShowUpAnim)
+            }
 
             // EditText focus listener
             edtNoteText.setOnFocusChangeListener { view, hasFocus ->
