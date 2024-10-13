@@ -2,6 +2,8 @@ package uz.ilmiddin1701.note.fragments
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -9,9 +11,11 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.Typeface
+import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.text.Editable
@@ -27,13 +31,13 @@ import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import uz.ilmiddin1701.note.MainActivity
 import uz.ilmiddin1701.note.R
 import uz.ilmiddin1701.note.adapters.ImagesAdapter
 import uz.ilmiddin1701.note.databinding.FragmentAddBinding
@@ -58,7 +62,13 @@ class AddFragment : Fragment(), ImagesAdapter.ImageClickAction {
     private var imagesString = ""
     private lateinit var imagesAdapter: ImagesAdapter
 
+    // For voice recorder
     private val recordAudioPermissionCode = 1
+    private var mediaRecorder: MediaRecorder? = null
+    private val handler = Handler()
+    private lateinit var amplitudeTextView: TextView
+    private lateinit var amplitudeProgressBar: ProgressBar
+    private lateinit var recordingDialog: Dialog
 
     @SuppressLint("SetTextI18n", "SimpleDateFormat")
     override fun onCreateView(
@@ -221,6 +231,8 @@ class AddFragment : Fragment(), ImagesAdapter.ImageClickAction {
                 loadImageFromExternalStorage.launch("image/*")
             }
 
+            btnVoice.setOnClickListener { requestPermissions() }
+
             val imagesRvCloseAnim = AnimationUtils.loadAnimation(context, R.anim.images_rv_close_anim)
             val imagesRvOpenAnim = AnimationUtils.loadAnimation(context, R.anim.images_rv_open_anim)
             val btnHideShowDownAnim = AnimationUtils.loadAnimation(context, R.anim.btn_hide_show_down_anim)
@@ -306,7 +318,7 @@ class AddFragment : Fragment(), ImagesAdapter.ImageClickAction {
         return binding.root
     }
 
-    fun decodeSampledBitmapFromUri(uri: Uri, reqWidth: Int, reqHeight: Int, context: Context): Bitmap? {
+    private fun decodeSampledBitmapFromUri(uri: Uri, reqWidth: Int, reqHeight: Int, context: Context): Bitmap? {
         val options = BitmapFactory.Options()
         options.inJustDecodeBounds = true
 
@@ -323,23 +335,19 @@ class AddFragment : Fragment(), ImagesAdapter.ImageClickAction {
         val inputStream2 = context.contentResolver.openInputStream(uri)
         val bitmap = BitmapFactory.decodeStream(inputStream2, null, options)
         inputStream2?.close()
-
         return bitmap
     }
 
-    fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int {
+    private fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int {
         val (height: Int, width: Int) = options.outHeight to options.outWidth
         var inSampleSize = 1
-
         if (height > reqHeight || width > reqWidth) {
             val halfHeight: Int = height / 2
             val halfWidth: Int = width / 2
-
             while (halfHeight / inSampleSize >= reqHeight && halfWidth / inSampleSize >= reqWidth) {
                 inSampleSize *= 2
             }
         }
-
         return inSampleSize
     }
 
@@ -368,7 +376,17 @@ class AddFragment : Fragment(), ImagesAdapter.ImageClickAction {
 
     private fun requestPermissions() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.RECORD_AUDIO), recordAudioPermissionCode)
+            val alertDialog = AlertDialog.Builder(context).create()
+            alertDialog.setTitle("Permission to record sound.")
+            alertDialog.setMessage("You need permission to record audio. Otherwise this function will not work!")
+            /*alertDialog.setPositiveButton("Okay") { _, _ ->
+                ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.RECORD_AUDIO), recordAudioPermissionCode)
+            }
+            alertDialog.setNegativeButton("Cancel") { _, _ ->
+                alertDialog.cancel()
+            }*/
+        } else {
+            showRecorderDialog()
         }
     }
 
@@ -397,6 +415,53 @@ class AddFragment : Fragment(), ImagesAdapter.ImageClickAction {
             vibrator.vibrate(VibrationEffect.createOneShot(40, VibrationEffect.DEFAULT_AMPLITUDE))
         } else {
             vibrator.vibrate(40) // Old versions
+        }
+    }
+
+    // Voice recorder functions
+    private fun showRecorderDialog() {
+        recordingDialog = Dialog(requireContext())
+        recordingDialog.setContentView(R.layout.item_voice_recorder)
+    }
+
+    private fun startRecording() {
+        mediaRecorder = MediaRecorder().apply {
+            setAudioSource(MediaRecorder.AudioSource.MIC) // Mikrofonni manba sifatida tanlash
+            setOutputFormat(MediaRecorder.OutputFormat.MPEG_4) // MPEG-4 formatida saqlash
+            setAudioEncoder(MediaRecorder.AudioEncoder.AAC) // AAC audio kodeki
+            setAudioEncodingBitRate(192000) // Yuqori bitrat (192 kbps)
+            setAudioSamplingRate(44100) // 44.1kHz - CD sifatida namuna olish
+            setOutputFile("${requireActivity().externalCacheDir?.absolutePath}/recorded_audio.mp4")
+
+            try {
+                prepare()
+                start()
+                updateAmplitude()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun stopRecording() {
+        mediaRecorder?.apply {
+            stop()
+            reset()
+            release()
+        }
+        mediaRecorder = null
+        handler.removeCallbacksAndMessages(null) // Ovoz darajasini yangilashni to'xtatish
+        recordingDialog.dismiss() // Dialogni yopish
+    }
+
+    private fun updateAmplitude() {
+        mediaRecorder?.let {
+            val amplitude = it.maxAmplitude
+            amplitudeTextView.text = "Ovoz darajasi: $amplitude"
+            amplitudeProgressBar.progress = (amplitude / 32767.0 * 100).toInt() // 0-100% o'zgartirish
+
+            // Yangilanishni davom ettirish
+            handler.postDelayed({ updateAmplitude() }, 100) // Har 100 ms da yangilash
         }
     }
 }
