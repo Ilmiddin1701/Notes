@@ -35,6 +35,7 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -73,6 +74,7 @@ class AddFragment : Fragment(), ImagesAdapter.ImageClickAction {
     private lateinit var btnSaveRecord: ImageView
     private lateinit var amplitudeProgressBar: ProgressBar
     private lateinit var recordingDialog: Dialog
+    private var voicesString = ""
 
     @SuppressLint("SetTextI18n", "SimpleDateFormat")
     override fun onCreateView(
@@ -313,7 +315,7 @@ class AddFragment : Fragment(), ImagesAdapter.ImageClickAction {
                     Html.toHtml(edtNoteText.text as Spannable),
                     SimpleDateFormat("dd.MM.yyyy").format(Date()),
                     tvNoteTime.text.toString(),
-                    imagesString
+                    imagesString, voicesString
                 )
                 myDbHelper.addNote(noteData)
                 findNavController().popBackStack()
@@ -383,12 +385,13 @@ class AddFragment : Fragment(), ImagesAdapter.ImageClickAction {
             val alertDialog = AlertDialog.Builder(context).create()
             alertDialog.setTitle("Permission to record sound.")
             alertDialog.setMessage("You need permission to record audio. Otherwise this function will not work!")
-            /*alertDialog.setPositiveButton("Okay") { _, _ ->
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE,"Ok") { _, _ ->
                 ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.RECORD_AUDIO), recordAudioPermissionCode)
             }
-            alertDialog.setNegativeButton("Cancel") { _, _ ->
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE,"Cancel") { _, _ ->
                 alertDialog.cancel()
-            }*/
+            }
+            alertDialog.show()
         } else {
             showRecorderDialog()
         }
@@ -429,51 +432,73 @@ class AddFragment : Fragment(), ImagesAdapter.ImageClickAction {
 
         amplitudeTextView = recordingDialog.findViewById(R.id.amplitudeTextView)
         amplitudeProgressBar = recordingDialog.findViewById(R.id.amplitudeProgressBar)
-        btnCancelRecord = recordingDialog.findViewById(R.id.btnCancelRecord)
+
         btnStartStopPauseRecord = recordingDialog.findViewById(R.id.btnStartStopPauseRecord)
+        btnCancelRecord = recordingDialog.findViewById(R.id.btnCancelRecord)
         btnSaveRecord = recordingDialog.findViewById(R.id.btnSaveRecord)
 
-
+        btnStartStopPauseRecord.setOnClickListener {
+            if (mediaRecorder == null) {
+                startRecording() // Yozishni boshlash
+            } else {
+                pauseRecording() // Yozishni to'xtatish yoki davom ettirish
+            }
+        }
+        recordingDialog.show()
     }
 
     private fun startRecording() {
+        val audioFile = File(requireActivity().filesDir, "REC_${UUID.randomUUID()}.3gp")
         mediaRecorder = MediaRecorder().apply {
-            setAudioSource(MediaRecorder.AudioSource.MIC) // Mikrofonni manba sifatida tanlash
-            setOutputFormat(MediaRecorder.OutputFormat.MPEG_4) // MPEG-4 formatida saqlash
-            setAudioEncoder(MediaRecorder.AudioEncoder.AAC) // AAC audio kodeki
-            setAudioEncodingBitRate(192000) // Yuqori bitrat (192 kbps)
-            setAudioSamplingRate(44100) // 44.1kHz - CD sifatida namuna olish
-            setOutputFile("${requireActivity().externalCacheDir?.absolutePath}/recorded_audio.mp4")
+            // Manba sifatida MIC (mikrofon)ni tanlaymiz
+            setAudioSource(MediaRecorder.AudioSource.DEFAULT)
 
-            try {
-                prepare()
-                start()
-                updateAmplitude()
-            } catch (e: Exception) {
-                e.printStackTrace()
+            // Ovoz kodekini AAC'ga o'zgartiramiz (bu yuqori sifatli kodek)
+            setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+            setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+
+            // Bitrate'ni maksimal qiymatga (128000 bps) o'rnatamiz
+            setAudioEncodingBitRate(128000)
+
+            // Sample Rate'ni yuqori sifat uchun 44100 Hz ga sozlaymiz
+            setAudioSamplingRate(44100)
+
+            // Ovoz faylini saqlash joyini o'rnatamiz
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                setOutputFile(audioFile)
             }
+
+            // Tayyorlaymiz va yozishni boshlaymiz
+            prepare()
+            start()
+        }
+
+        // Yozish paytida amplituda (balandlik) o'lchamini ko'rsatish
+        handler.post(object : Runnable {
+            override fun run() {
+                if (mediaRecorder != null) {
+                    val amplitude = mediaRecorder?.maxAmplitude ?: 0
+                    amplitudeTextView.text = amplitude.toString()
+                    amplitudeProgressBar.progress = amplitude
+                    handler.postDelayed(this, 100)
+                }
+            }
+        })
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    private fun pauseRecording() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            mediaRecorder?.pause() // Yozishni vaqtincha to'xtatish
         }
     }
 
     private fun stopRecording() {
         mediaRecorder?.apply {
             stop()
-            reset()
             release()
         }
         mediaRecorder = null
-        handler.removeCallbacksAndMessages(null) // Ovoz darajasini yangilashni to'xtatish
-        recordingDialog.dismiss() // Dialogni yopish
-    }
-
-    private fun updateAmplitude() {
-        mediaRecorder?.let {
-            val amplitude = it.maxAmplitude
-            amplitudeTextView.text = "Ovoz darajasi: $amplitude"
-            amplitudeProgressBar.progress = (amplitude / 32767.0 * 100).toInt() // 0-100% o'zgartirish
-
-            // Yangilanishni davom ettirish
-            handler.postDelayed({ updateAmplitude() }, 100) // Har 100 ms da yangilash
-        }
+        handler.removeCallbacksAndMessages(null) // Amplituda yangilanishini to'xtatish
     }
 }

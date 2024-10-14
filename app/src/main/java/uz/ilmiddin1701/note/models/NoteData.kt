@@ -9,21 +9,39 @@ class NoteData: Serializable {
     var date: String? = null
     var time: String? = null
     var images: String? = null
+    var voices: String? = null
 
-    constructor(id: Int?, name: String?, text: String?, date: String?, time: String?, images: String?) {
+    constructor(
+        id: Int?,
+        name: String?,
+        text: String?,
+        date: String?,
+        time: String?,
+        images: String?,
+        voices: String?
+    ) {
         this.id = id
         this.name = name
         this.text = text
         this.date = date
         this.time = time
         this.images = images
+        this.voices = voices
     }
 
-    constructor(name: String?, text: String?, date: String?, time: String?, images: String?) {
+    constructor(
+        name: String?,
+        text: String?,
+        date: String?,
+        time: String?,
+        images: String?,
+        voices: String?
+    ) {
         this.name = name
         this.text = text
         this.date = date
         this.time = time
         this.images = images
+        this.voices = voices
     }
 }
