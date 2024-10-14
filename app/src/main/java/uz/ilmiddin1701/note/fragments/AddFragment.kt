@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -30,6 +31,7 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
 import android.view.animation.AnimationUtils
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -37,12 +39,14 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import uz.ilmiddin1701.note.R
 import uz.ilmiddin1701.note.adapters.ImagesAdapter
 import uz.ilmiddin1701.note.databinding.FragmentAddBinding
+import uz.ilmiddin1701.note.databinding.ItemVoiceRecorderBinding
 import uz.ilmiddin1701.note.db.MyDbHelper
 import uz.ilmiddin1701.note.models.NoteData
 import uz.ilmiddin1701.note.utils.MySharedPreferences
@@ -68,12 +72,6 @@ class AddFragment : Fragment(), ImagesAdapter.ImageClickAction {
     private val recordAudioPermissionCode = 1
     private var mediaRecorder: MediaRecorder? = null
     private val handler = Handler()
-    private lateinit var amplitudeTextView: TextView
-    private lateinit var btnCancelRecord: ImageView
-    private lateinit var btnStartStopPauseRecord: ImageView
-    private lateinit var btnSaveRecord: ImageView
-    private lateinit var amplitudeProgressBar: ProgressBar
-    private lateinit var recordingDialog: Dialog
     private var voicesString = ""
 
     @SuppressLint("SetTextI18n", "SimpleDateFormat")
@@ -427,17 +425,10 @@ class AddFragment : Fragment(), ImagesAdapter.ImageClickAction {
 
     // Voice recorder functions
     private fun showRecorderDialog() {
-        recordingDialog = Dialog(requireContext())
-        recordingDialog.setContentView(R.layout.item_voice_recorder)
-
-        amplitudeTextView = recordingDialog.findViewById(R.id.amplitudeTextView)
-        amplitudeProgressBar = recordingDialog.findViewById(R.id.amplitudeProgressBar)
-
-        btnStartStopPauseRecord = recordingDialog.findViewById(R.id.btnStartStopPauseRecord)
-        btnCancelRecord = recordingDialog.findViewById(R.id.btnCancelRecord)
-        btnSaveRecord = recordingDialog.findViewById(R.id.btnSaveRecord)
-
-        btnStartStopPauseRecord.setOnClickListener {
+        val recordingDialog = AlertDialog.Builder(context)
+        val customView = ItemVoiceRecorderBinding.inflate(layoutInflater)
+        recordingDialog.setView(customView.root)
+        customView.btnStartStopPauseRecord.setOnClickListener {
             if (mediaRecorder == null) {
                 startRecording() // Yozishni boshlash
             } else {
@@ -477,9 +468,10 @@ class AddFragment : Fragment(), ImagesAdapter.ImageClickAction {
         handler.post(object : Runnable {
             override fun run() {
                 if (mediaRecorder != null) {
+                    val customView = ItemVoiceRecorderBinding.inflate(layoutInflater)
                     val amplitude = mediaRecorder?.maxAmplitude ?: 0
-                    amplitudeTextView.text = amplitude.toString()
-                    amplitudeProgressBar.progress = amplitude
+                    customView.amplitudeTextView.text = amplitude.toString()
+                    customView.amplitudeProgressBar.progress = amplitude
                     handler.postDelayed(this, 100)
                 }
             }
