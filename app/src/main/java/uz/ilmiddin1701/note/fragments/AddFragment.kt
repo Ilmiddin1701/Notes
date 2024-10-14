@@ -30,6 +30,7 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
 import android.view.animation.AnimationUtils
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -67,6 +68,9 @@ class AddFragment : Fragment(), ImagesAdapter.ImageClickAction {
     private var mediaRecorder: MediaRecorder? = null
     private val handler = Handler()
     private lateinit var amplitudeTextView: TextView
+    private lateinit var btnCancelRecord: ImageView
+    private lateinit var btnStartStopPauseRecord: ImageView
+    private lateinit var btnSaveRecord: ImageView
     private lateinit var amplitudeProgressBar: ProgressBar
     private lateinit var recordingDialog: Dialog
 
@@ -422,6 +426,14 @@ class AddFragment : Fragment(), ImagesAdapter.ImageClickAction {
     private fun showRecorderDialog() {
         recordingDialog = Dialog(requireContext())
         recordingDialog.setContentView(R.layout.item_voice_recorder)
+
+        amplitudeTextView = recordingDialog.findViewById(R.id.amplitudeTextView)
+        amplitudeProgressBar = recordingDialog.findViewById(R.id.amplitudeProgressBar)
+        btnCancelRecord = recordingDialog.findViewById(R.id.btnCancelRecord)
+        btnStartStopPauseRecord = recordingDialog.findViewById(R.id.btnStartStopPauseRecord)
+        btnSaveRecord = recordingDialog.findViewById(R.id.btnSaveRecord)
+
+
     }
 
     private fun startRecording() {
