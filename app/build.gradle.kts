@@ -50,9 +50,6 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    //glide
-    implementation("com.github.bumptech.glide:glide:4.16.0")
-
     //room
     implementation (libs.androidx.room.runtime)
     annotationProcessor (libs.androidx.room.compiler)

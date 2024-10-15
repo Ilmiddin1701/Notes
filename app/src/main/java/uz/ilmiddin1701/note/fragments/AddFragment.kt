@@ -1,22 +1,13 @@
 package uz.ilmiddin1701.note.fragments
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
-import android.content.Context.INPUT_METHOD_SERVICE
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.Typeface
-import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.text.Editable
@@ -31,22 +22,14 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
 import android.view.animation.AnimationUtils
-import android.view.inputmethod.InputMethodManager
-import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import uz.ilmiddin1701.note.R
 import uz.ilmiddin1701.note.adapters.ImagesAdapter
 import uz.ilmiddin1701.note.databinding.FragmentAddBinding
-import uz.ilmiddin1701.note.databinding.ItemVoiceRecorderBinding
 import uz.ilmiddin1701.note.db.MyDbHelper
 import uz.ilmiddin1701.note.models.NoteData
 import uz.ilmiddin1701.note.utils.MySharedPreferences
@@ -56,7 +39,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.UUID
 
-class AddFragment : Fragment(), ImagesAdapter.ImageClickAction {
+class AddFragment : Fragment() {
     private val binding by lazy { FragmentAddBinding.inflate(layoutInflater) }
     private lateinit var myDbHelper: MyDbHelper
     private lateinit var bnb: LinearLayout
@@ -67,12 +50,6 @@ class AddFragment : Fragment(), ImagesAdapter.ImageClickAction {
     private lateinit var imagesList: ArrayList<String>
     private var imagesString = ""
     private lateinit var imagesAdapter: ImagesAdapter
-
-    // For voice recorder
-    private val recordAudioPermissionCode = 1
-    private var mediaRecorder: MediaRecorder? = null
-    private val handler = Handler()
-    private var voicesString = ""
 
     @SuppressLint("SetTextI18n", "SimpleDateFormat")
     override fun onCreateView(
@@ -235,8 +212,6 @@ class AddFragment : Fragment(), ImagesAdapter.ImageClickAction {
                 loadImageFromExternalStorage.launch("image/*")
             }
 
-            btnVoice.setOnClickListener { requestPermissions() }
-
             val imagesRvCloseAnim = AnimationUtils.loadAnimation(context, R.anim.images_rv_close_anim)
             val imagesRvOpenAnim = AnimationUtils.loadAnimation(context, R.anim.images_rv_open_anim)
             val btnHideShowDownAnim = AnimationUtils.loadAnimation(context, R.anim.btn_hide_show_down_anim)
@@ -313,7 +288,7 @@ class AddFragment : Fragment(), ImagesAdapter.ImageClickAction {
                     Html.toHtml(edtNoteText.text as Spannable),
                     SimpleDateFormat("dd.MM.yyyy").format(Date()),
                     tvNoteTime.text.toString(),
-                    imagesString, voicesString
+                    imagesString
                 )
                 myDbHelper.addNote(noteData)
                 findNavController().popBackStack()
@@ -322,77 +297,21 @@ class AddFragment : Fragment(), ImagesAdapter.ImageClickAction {
         return binding.root
     }
 
-    private fun decodeSampledBitmapFromUri(uri: Uri, reqWidth: Int, reqHeight: Int, context: Context): Bitmap? {
-        val options = BitmapFactory.Options()
-        options.inJustDecodeBounds = true
-
-        // Rasmning o'lchamlarini aniqlash (bitta o'lchamli yuklash)
-        val inputStream = context.contentResolver.openInputStream(uri)
-        BitmapFactory.decodeStream(inputStream, null, options)
-        inputStream?.close()
-
-        // Rasm o'lchamlarini kerakli o'lchamlarga moslashtirish
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight)
-        options.inJustDecodeBounds = false
-
-        // Rasmni optimallashtirilgan o'lchamda yuklash
-        val inputStream2 = context.contentResolver.openInputStream(uri)
-        val bitmap = BitmapFactory.decodeStream(inputStream2, null, options)
-        inputStream2?.close()
-        return bitmap
-    }
-
-    private fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int {
-        val (height: Int, width: Int) = options.outHeight to options.outWidth
-        var inSampleSize = 1
-        if (height > reqHeight || width > reqWidth) {
-            val halfHeight: Int = height / 2
-            val halfWidth: Int = width / 2
-            while (halfHeight / inSampleSize >= reqHeight && halfWidth / inSampleSize >= reqWidth) {
-                inSampleSize *= 2
-            }
-        }
-        return inSampleSize
-    }
-
     private val loadImageFromExternalStorage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri ?: return@registerForActivityResult
         // Rasmni listga qo'shish va ko'rsatish
         imagesList.add(uri.toString())
-        imagesAdapter = ImagesAdapter(imagesList, this)
+        imagesAdapter = ImagesAdapter(imagesList)
         binding.rvImages.adapter = imagesAdapter
         binding.imagesRelative.visibility = View.VISIBLE
 
-        // Optimallashtirilgan rasm yuklash
-        val bitmap = decodeSampledBitmapFromUri(uri, 1024, 1024, requireContext())
-        bitmap?.let {
-            val file = File(requireActivity().filesDir, "IMG_${UUID.randomUUID()}.jpg")
-            val fileOutputStream = FileOutputStream(file)
-            it.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream) // Rasmni JPEG formatida saqlash
-            fileOutputStream.close()
-            imagesString += file.absolutePath + ","
-        }
-    }
-
-    override fun imageClick(image: String, position: Int) {
-
-    }
-
-    private fun requestPermissions() {
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            val alertDialog = AlertDialog.Builder(context).create()
-            alertDialog.setTitle("Permission to record sound.")
-            alertDialog.setMessage("You need permission to record audio. Otherwise this function will not work!")
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE,"Ok") { _, _ ->
-                ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.RECORD_AUDIO), recordAudioPermissionCode)
-            }
-            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE,"Cancel") { _, _ ->
-                alertDialog.cancel()
-            }
-            alertDialog.show()
-        } else {
-            showRecorderDialog()
-        }
+        val inputStream = requireActivity().contentResolver?.openInputStream(uri)
+        val file = File(requireActivity().filesDir, "IMG_${UUID.randomUUID()}.jpg")
+        val fileOutputStream = FileOutputStream(file)
+        inputStream?.copyTo(fileOutputStream)
+        inputStream?.close()
+        fileOutputStream.close()
+        imagesString += file.absolutePath + ","
     }
 
     override fun onPause() {
@@ -421,76 +340,5 @@ class AddFragment : Fragment(), ImagesAdapter.ImageClickAction {
         } else {
             vibrator.vibrate(40) // Old versions
         }
-    }
-
-    // Voice recorder functions
-    private fun showRecorderDialog() {
-        val recordingDialog = AlertDialog.Builder(context)
-        val customView = ItemVoiceRecorderBinding.inflate(layoutInflater)
-        recordingDialog.setView(customView.root)
-        customView.btnStartStopPauseRecord.setOnClickListener {
-            if (mediaRecorder == null) {
-                startRecording() // Yozishni boshlash
-            } else {
-                pauseRecording() // Yozishni to'xtatish yoki davom ettirish
-            }
-        }
-        recordingDialog.show()
-    }
-
-    private fun startRecording() {
-        val audioFile = File(requireActivity().filesDir, "REC_${UUID.randomUUID()}.3gp")
-        mediaRecorder = MediaRecorder().apply {
-            // Manba sifatida MIC (mikrofon)ni tanlaymiz
-            setAudioSource(MediaRecorder.AudioSource.DEFAULT)
-
-            // Ovoz kodekini AAC'ga o'zgartiramiz (bu yuqori sifatli kodek)
-            setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-            setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-
-            // Bitrate'ni maksimal qiymatga (128000 bps) o'rnatamiz
-            setAudioEncodingBitRate(128000)
-
-            // Sample Rate'ni yuqori sifat uchun 44100 Hz ga sozlaymiz
-            setAudioSamplingRate(44100)
-
-            // Ovoz faylini saqlash joyini o'rnatamiz
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                setOutputFile(audioFile)
-            }
-
-            // Tayyorlaymiz va yozishni boshlaymiz
-            prepare()
-            start()
-        }
-
-        // Yozish paytida amplituda (balandlik) o'lchamini ko'rsatish
-        handler.post(object : Runnable {
-            override fun run() {
-                if (mediaRecorder != null) {
-                    val customView = ItemVoiceRecorderBinding.inflate(layoutInflater)
-                    val amplitude = mediaRecorder?.maxAmplitude ?: 0
-                    customView.amplitudeTextView.text = amplitude.toString()
-                    customView.amplitudeProgressBar.progress = amplitude
-                    handler.postDelayed(this, 100)
-                }
-            }
-        })
-    }
-
-    @SuppressLint("ObsoleteSdkInt")
-    private fun pauseRecording() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            mediaRecorder?.pause() // Yozishni vaqtincha to'xtatish
-        }
-    }
-
-    private fun stopRecording() {
-        mediaRecorder?.apply {
-            stop()
-            release()
-        }
-        mediaRecorder = null
-        handler.removeCallbacksAndMessages(null) // Amplituda yangilanishini to'xtatish
     }
 }

@@ -22,30 +22,114 @@ import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
+import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import uz.ilmiddin1701.note.R
 import uz.ilmiddin1701.note.adapters.ImagesAdapter
+import uz.ilmiddin1701.note.adapters.SowImagesAdapter
 import uz.ilmiddin1701.note.databinding.FragmentShowBinding
+import uz.ilmiddin1701.note.db.MyDbHelper
 import uz.ilmiddin1701.note.models.NoteData
 import uz.ilmiddin1701.note.utils.MySharedPreferences
 
 @Suppress("DEPRECATION")
-class ShowFragment : Fragment(), ImagesAdapter.ImageClickAction {
+class ShowFragment : Fragment(), SowImagesAdapter.ImageClickAction {
     private val binding by lazy { FragmentShowBinding.inflate(layoutInflater) }
+    private lateinit var myDbHelper: MyDbHelper
     private lateinit var bnb: LinearLayout
-    private lateinit var imagesAdapter: ImagesAdapter
     private var boldStyle = false
     private var italicStyle = false
     private var markerStyle = false
+
+    private lateinit var imagesList: ArrayList<String>
+    private var imagesString = ""
+    private lateinit var showImagesAdapter: SowImagesAdapter
+
+    private lateinit var loadedNote: NoteData
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val loadedNote = arguments?.getSerializable("keyNoteData") as NoteData
+        MySharedPreferences.init(requireContext())
+        myDbHelper = MyDbHelper(requireContext())
+        val n = arguments?.getSerializable("keyNoteData") as NoteData
+        for(i in myDbHelper.showNotes()) {
+            if (i.id == n.id) {
+                loadedNote = i
+            }
+        }
         binding.apply {
+            when (MySharedPreferences.bottomNavBarColor) {
+                0 -> {
+                    btnHideShow.setBackgroundResource(R.drawable.bottom_style)
+                    linRecycler.setBackgroundResource(R.drawable.images_linear_style)
+                    actionBar.setBackgroundColor(Color.parseColor("#096EB4"))
+                    functionalLinear.setBackgroundColor(Color.parseColor("#096EB4"))
+                }
+                1 -> {
+                    btnHideShow.setBackgroundResource(R.drawable.bottom_style)
+                    linRecycler.setBackgroundResource(R.drawable.images_linear_style)
+                    actionBar.setBackgroundColor(Color.parseColor("#096EB4"))
+                    functionalLinear.setBackgroundColor(Color.parseColor("#096EB4"))
+                }
+                2 -> {
+                    btnHideShow.setBackgroundResource(R.drawable.bottom_style_2)
+                    linRecycler.setBackgroundResource(R.drawable.images_linear_style2)
+                    actionBar.setBackgroundColor(Color.parseColor("#673AB7"))
+                    functionalLinear.setBackgroundColor(Color.parseColor("#673AB7"))
+                }
+                3 -> {
+                    btnHideShow.setBackgroundResource(R.drawable.bottom_style_3)
+                    linRecycler.setBackgroundResource(R.drawable.images_linear_style3)
+                    actionBar.setBackgroundColor(Color.parseColor("#FF5722"))
+                    functionalLinear.setBackgroundColor(Color.parseColor("#FF5722"))
+                }
+                4 -> {
+                    btnHideShow.setBackgroundResource(R.drawable.bottom_style_4)
+                    linRecycler.setBackgroundResource(R.drawable.images_linear_style4)
+                    actionBar.setBackgroundColor(Color.parseColor("#FF9800"))
+                    functionalLinear.setBackgroundColor(Color.parseColor("#FF9800"))
+                }
+                5 -> {
+                    btnHideShow.setBackgroundResource(R.drawable.bottom_style_5)
+                    linRecycler.setBackgroundResource(R.drawable.images_linear_style5)
+                    actionBar.setBackgroundColor(Color.parseColor("#E91E63"))
+                    functionalLinear.setBackgroundColor(Color.parseColor("#E91E63"))
+                }
+                6 -> {
+                    btnHideShow.setBackgroundResource(R.drawable.bottom_style_6)
+                    linRecycler.setBackgroundResource(R.drawable.images_linear_style6)
+                    actionBar.setBackgroundColor(Color.parseColor("#009688"))
+                    functionalLinear.setBackgroundColor(Color.parseColor("#009688"))
+                }
+                7 -> {
+                    btnHideShow.setBackgroundResource(R.drawable.bottom_style_7)
+                    linRecycler.setBackgroundResource(R.drawable.images_linear_style7)
+                    actionBar.setBackgroundColor(Color.parseColor("#4CAF50"))
+                    functionalLinear.setBackgroundColor(Color.parseColor("#4CAF50"))
+                }
+                8 -> {
+                    btnHideShow.setBackgroundResource(R.drawable.bottom_style_8)
+                    linRecycler.setBackgroundResource(R.drawable.images_linear_style8)
+                    actionBar.setBackgroundColor(Color.parseColor("#363F5E"))
+                    functionalLinear.setBackgroundColor(Color.parseColor("#363F5E"))
+                }
+                9 -> {
+                    btnHideShow.setBackgroundResource(R.drawable.bottom_style_9)
+                    linRecycler.setBackgroundResource(R.drawable.images_linear_style9)
+                    actionBar.setBackgroundColor(Color.parseColor("#457B9D"))
+                    functionalLinear.setBackgroundColor(Color.parseColor("#457B9D"))
+                }
+                10 -> {
+                    btnHideShow.setBackgroundResource(R.drawable.bottom_style_10)
+                    linRecycler.setBackgroundResource(R.drawable.images_linear_style10)
+                    actionBar.setBackgroundColor(Color.parseColor("#B93E20"))
+                    functionalLinear.setBackgroundColor(Color.parseColor("#B93E20"))
+                }
+            }
             btnBack.setOnClickListener { findNavController().popBackStack() }
             edtNoteText.addTextChangedListener { tvSymbol.text = it.toString().length.toString() + " symbols" }
             //Background Color
@@ -125,12 +209,13 @@ class ShowFragment : Fragment(), ImagesAdapter.ImageClickAction {
             edtNoteName.setText(loadedNote.name)
             edtNoteText.setText(Html.fromHtml(loadedNote.text, Html.FROM_HTML_MODE_COMPACT).trim())
             tvNoteDate.text = loadedNote.date
+            tvNoteTime.text = loadedNote.time
             tvSymbol.text = edtNoteText.text.length.toString() + " symbols"
             if (loadedNote.images != "") {
                 imagesRelative.visibility = View.VISIBLE
                 val imageArray = loadedNote.images!!.split(",").filter { it.isNotEmpty() }
-                imagesAdapter = ImagesAdapter(imageArray as ArrayList<String>, this@ShowFragment)
-                rvImages.adapter = imagesAdapter
+                showImagesAdapter = SowImagesAdapter(imageArray as ArrayList<String>, this@ShowFragment)
+                rvImages.adapter = showImagesAdapter
                 linRecycler.visibility = View.VISIBLE
                 linRecycler.startAnimation(imagesRvOpenAnim)
                 btnHideShow.startAnimation(btnHideShowUpAnim)
@@ -181,10 +266,6 @@ class ShowFragment : Fragment(), ImagesAdapter.ImageClickAction {
         return binding.root
     }
 
-    override fun imageClick(image: String, position: Int) {
-
-    }
-
     override fun onPause() {
         super.onPause()
         val bottomNavEnterAnim = AnimationUtils.loadAnimation(context, R.anim.bottom_nav_enter)
@@ -211,5 +292,10 @@ class ShowFragment : Fragment(), ImagesAdapter.ImageClickAction {
         } else {
             vibrator.vibrate(40) // Old versions
         }
+    }
+
+    // Image Click
+    override fun imageClick(image: String) {
+        findNavController().navigate(R.id.imageShowFragment, bundleOf("keyImageResource" to image))
     }
 }

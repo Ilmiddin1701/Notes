@@ -20,7 +20,6 @@ class MyDbHelper(var context: Context) : SQLiteOpenHelper(context, DB_NAME, null
         const val DATE = "date"
         const val TIME = "time"
         const val IMAGES = "images"
-        const val VOICES = "voices"
     }
 
     override fun onCreate(p0: SQLiteDatabase?) {
@@ -28,7 +27,7 @@ class MyDbHelper(var context: Context) : SQLiteOpenHelper(context, DB_NAME, null
                 "$ID integer not null primary key autoincrement unique, " +
                 "$NAME text not null, $TEXT text not null, " +
                 "$DATE text not null, $TIME text not null, " +
-                "$IMAGES text not null, $VOICES text not null)"
+                "$IMAGES text not null)"
         p0?.execSQL(query)
     }
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {}
@@ -41,7 +40,6 @@ class MyDbHelper(var context: Context) : SQLiteOpenHelper(context, DB_NAME, null
         contentValues.put(DATE, noteData.date)
         contentValues.put(TIME, noteData.time)
         contentValues.put(IMAGES, noteData.images)
-        contentValues.put(VOICES, noteData.voices)
         database.insert(TABLE_NAME, null, contentValues)
         database.close()
     }
@@ -64,8 +62,7 @@ class MyDbHelper(var context: Context) : SQLiteOpenHelper(context, DB_NAME, null
                     cursor.getString(2),
                     cursor.getString(3),
                     cursor.getString(4),
-                    cursor.getString(5),
-                    cursor.getString(6)
+                    cursor.getString(5)
                 )
                 list.add(noteData)
             }while (cursor.moveToNext())

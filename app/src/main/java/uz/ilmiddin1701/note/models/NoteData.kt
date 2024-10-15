@@ -9,7 +9,6 @@ class NoteData: Serializable {
     var date: String? = null
     var time: String? = null
     var images: String? = null
-    var voices: String? = null
 
     constructor(
         id: Int?,
@@ -17,8 +16,7 @@ class NoteData: Serializable {
         text: String?,
         date: String?,
         time: String?,
-        images: String?,
-        voices: String?
+        images: String?
     ) {
         this.id = id
         this.name = name
@@ -26,7 +24,6 @@ class NoteData: Serializable {
         this.date = date
         this.time = time
         this.images = images
-        this.voices = voices
     }
 
     constructor(
@@ -34,14 +31,12 @@ class NoteData: Serializable {
         text: String?,
         date: String?,
         time: String?,
-        images: String?,
-        voices: String?
+        images: String?
     ) {
         this.name = name
         this.text = text
         this.date = date
         this.time = time
         this.images = images
-        this.voices = voices
     }
 }

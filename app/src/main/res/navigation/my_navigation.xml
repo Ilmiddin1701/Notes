@@ -25,4 +25,9 @@
         android:name="uz.ilmiddin1701.note.fragments.ShowFragment"
         android:label="fragment_show"
         tools:layout="@layout/fragment_show" />
+    <fragment
+        android:id="@+id/imageShowFragment"
+        android:name="uz.ilmiddin1701.note.fragments.ImageShowFragment"
+        android:label="fragment_image_show"
+        tools:layout="@layout/fragment_image_show" />
 </navigation>

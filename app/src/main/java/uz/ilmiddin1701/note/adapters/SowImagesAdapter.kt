@@ -2,42 +2,41 @@ package uz.ilmiddin1701.note.adapters
 
 import android.content.Context
 import android.graphics.BitmapFactory
-import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import uz.ilmiddin1701.note.databinding.ItemImagesBinding
+import java.io.File
 
-class ImagesAdapter(var list: ArrayList<String>) : RecyclerView.Adapter<ImagesAdapter.Vh>() {
+class SowImagesAdapter(var list: ArrayList<String>, var imageClickAction: ImageClickAction) : RecyclerView.Adapter<SowImagesAdapter.Vh>() {
 
     inner class Vh(var itemImagesBinding: ItemImagesBinding) : RecyclerView.ViewHolder(itemImagesBinding.root) {
         fun onBind(image: String, position: Int) {
+            val screenWidth = getScreenWidth(itemView.context)
+            val screenHeight = getScreenHeight(itemView.context)
+
             try {
-                if (image != "") {
-                    val screenWidth = getScreenWidth(itemView.context)
-                    val screenHeight = getScreenHeight(itemView.context)
-
-                    val uri = Uri.parse(image)
+                // absolute path orqali faylga murojaat qilish
+                val file = File(image)
+                if (file.exists()) {
+                    // Faylni optimallashtirish bilan yuklash
                     val options = BitmapFactory.Options()
-                    options.inJustDecodeBounds = true // Rasmning o'lchamini olish uchun
-                    val inputStream = itemView.context.contentResolver.openInputStream(uri)
-                    BitmapFactory.decodeStream(inputStream, null, options)
-                    inputStream?.close()
+                    options.inJustDecodeBounds = true
+                    BitmapFactory.decodeFile(file.absolutePath, options)
 
-                    // O'lchamni optimallashtirish uchun 'inSampleSize' ni hisoblash
                     options.inSampleSize = calculateInSampleSize(options, screenWidth, screenHeight)
                     options.inJustDecodeBounds = false
 
-                    // Optimizatsiyalangan rasm yuklash
-                    val inputStream2 = itemView.context.contentResolver.openInputStream(uri)
-                    val bitmap = BitmapFactory.decodeStream(inputStream2, null, options)
-                    inputStream2?.close()
+                    val bitmap = BitmapFactory.decodeFile(file.absolutePath, options)
 
                     itemImagesBinding.imgLoaded.setImageBitmap(bitmap)
                 }
             } catch (e: Exception) {
-                Log.e("ImageLoadError", "Error loading image: ${e.message}")
+                e.printStackTrace() // Xatoliklarni loglash
+            }
+
+            itemImagesBinding.rvImageCard.setOnClickListener {
+                imageClickAction.imageClick(image)
             }
         }
     }
@@ -52,7 +51,20 @@ class ImagesAdapter(var list: ArrayList<String>) : RecyclerView.Adapter<ImagesAd
         holder.onBind(list[position], position)
     }
 
-    // Rasmni o'lchamini optimallashtirish uchun funksiyani qo'shamiz
+    interface ImageClickAction {
+        fun imageClick(image: String)
+    }
+
+    fun getScreenWidth(context: Context): Int {
+        val displayMetrics = context.resources.displayMetrics
+        return displayMetrics.widthPixels
+    }
+
+    fun getScreenHeight(context: Context): Int {
+        val displayMetrics = context.resources.displayMetrics
+        return displayMetrics.heightPixels
+    }
+
     private fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int {
         val (height: Int, width: Int) = options.outHeight to options.outWidth
         var inSampleSize = 1
@@ -66,15 +78,5 @@ class ImagesAdapter(var list: ArrayList<String>) : RecyclerView.Adapter<ImagesAd
             }
         }
         return inSampleSize
-    }
-
-    fun getScreenWidth(context: Context): Int {
-        val displayMetrics = context.resources.displayMetrics
-        return displayMetrics.widthPixels
-    }
-
-    fun getScreenHeight(context: Context): Int {
-        val displayMetrics = context.resources.displayMetrics
-        return displayMetrics.heightPixels
     }
 }

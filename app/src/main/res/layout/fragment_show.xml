@@ -70,12 +70,11 @@
             android:gravity="center_vertical"
             android:textColor="@color/black" />
 
-        <TextClock
+        <TextView
             android:id="@+id/tvNoteTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:format24Hour="HH:mm:ss"
             android:gravity="center_vertical"
             android:textColor="@color/black" />
 
@@ -169,14 +168,6 @@
         android:gravity="center"
         android:orientation="horizontal"
         android:visibility="invisible">
-
-        <ImageView
-            android:id="@+id/btnVoice"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:paddingVertical="10dp"
-            android:src="@drawable/ic_voice" />
 
         <ImageView
             android:id="@+id/btnGallery"

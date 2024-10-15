@@ -172,14 +172,6 @@
         android:visibility="invisible">
 
         <ImageView
-            android:id="@+id/btnVoice"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:paddingVertical="10dp"
-            android:src="@drawable/ic_voice" />
-
-        <ImageView
             android:id="@+id/btnGallery"
             android:layout_width="0dp"
             android:layout_height="match_parent"
