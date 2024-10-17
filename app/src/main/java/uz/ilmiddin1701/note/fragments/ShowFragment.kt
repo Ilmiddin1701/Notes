@@ -272,17 +272,19 @@ class ShowFragment : Fragment(), SowImagesAdapter.ImageClickAction {
 
             // Edit Note
             btnEdit.setOnClickListener {
-                myDbHelper.editNote(
-                    NoteData(
-                        loadedNote.id,
-                        edtNoteName.text.toString(),
-                        Html.toHtml(edtNoteText.text as Spannable, Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE),
-                        SimpleDateFormat("dd.MM.yyyy").format(Date()),
-                        SimpleDateFormat("HH:mm:ss").format(Date()),
-                        imagesString
+                if (edtNoteText.text.isNotBlank() && edtNoteName.text.isNotBlank()) {
+                    myDbHelper.editNote(
+                        NoteData(
+                            loadedNote.id,
+                            edtNoteName.text.toString(),
+                            Html.toHtml(edtNoteText.text as Spannable, Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE),
+                            SimpleDateFormat("dd.MM.yyyy").format(Date()),
+                            SimpleDateFormat("HH:mm:ss").format(Date()),
+                            imagesString
+                        )
                     )
-                )
-                findNavController().popBackStack()
+                    findNavController().popBackStack()
+                }
             }
         }
         return binding.root

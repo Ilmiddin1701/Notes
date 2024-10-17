@@ -284,15 +284,20 @@ class AddFragment : Fragment(), ImagesAdapter.AddFragmentRvAction {
 
             // Save Note
             btnSave.setOnClickListener {
-                val noteData = NoteData(
-                    edtNoteName.text.toString(),
-                    Html.toHtml(edtNoteText.text as Spannable, Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE),
-                    SimpleDateFormat("dd.MM.yyyy").format(Date()),
-                    tvNoteTime.text.toString(),
-                    imagesString
-                )
-                myDbHelper.addNote(noteData)
-                findNavController().popBackStack()
+                if (edtNoteText.text.isNotBlank() && edtNoteName.text.isNotBlank()) {
+                    val noteData = NoteData(
+                        edtNoteName.text.toString(),
+                        Html.toHtml(
+                            edtNoteText.text as Spannable,
+                            Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE
+                        ),
+                        SimpleDateFormat("dd.MM.yyyy").format(Date()),
+                        tvNoteTime.text.toString(),
+                        imagesString
+                    )
+                    myDbHelper.addNote(noteData)
+                    findNavController().popBackStack()
+                }
             }
         }
         return binding.root
