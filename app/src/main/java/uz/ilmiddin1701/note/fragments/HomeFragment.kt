@@ -1,6 +1,7 @@
 package uz.ilmiddin1701.note.fragments
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import uz.ilmiddin1701.note.R
 import uz.ilmiddin1701.note.adapters.NotesAdapter
+import uz.ilmiddin1701.note.adapters.SowImagesAdapter
 import uz.ilmiddin1701.note.databinding.FragmentHomeBinding
 import uz.ilmiddin1701.note.db.MyDbHelper
 import uz.ilmiddin1701.note.models.NoteData
@@ -21,6 +23,7 @@ class HomeFragment : Fragment(), NotesAdapter.NotesActionListener {
     private val binding by lazy { FragmentHomeBinding.inflate(layoutInflater) }
     private lateinit var notesAdapter: NotesAdapter
     private lateinit var myDbHelper: MyDbHelper
+    private lateinit var notesList: ArrayList<NoteData>
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,7 +85,7 @@ class HomeFragment : Fragment(), NotesAdapter.NotesActionListener {
                 }
             }
 
-            val notesList = ArrayList<NoteData>()
+            notesList = ArrayList()
             notesList.addAll(myDbHelper.showNotes())
             notesAdapter = NotesAdapter(this@HomeFragment, notesList)
             rvNotes.adapter = notesAdapter
@@ -103,5 +106,20 @@ class HomeFragment : Fragment(), NotesAdapter.NotesActionListener {
 
     override fun onNoteClick(noteData: NoteData) {
         findNavController().navigate(R.id.showFragment, bundleOf("keyNoteData" to noteData))
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onNoteLongClick(noteData: NoteData, position: Int) {
+        val dialog = AlertDialog.Builder(context).create()
+        dialog.setTitle("Delete note?")
+        dialog.setMessage("Deleting this note will result in the deletion of all data collected on it!")
+        dialog.setButton(AlertDialog.BUTTON_POSITIVE, "Delete") { _, _ ->
+            myDbHelper.deleteNote(noteData)
+            notesList.clear()
+            notesList.addAll(myDbHelper.showNotes())
+            notesAdapter.notifyDataSetChanged()
+        }
+        dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel") { _, _ -> dialog.cancel() }
+        dialog.show()
     }
 }

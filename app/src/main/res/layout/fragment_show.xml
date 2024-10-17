@@ -24,7 +24,7 @@
             android:src="@drawable/ic_back" />
 
         <TextView
-            android:id="@+id/btnSave"
+            android:id="@+id/btnEdit"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginEnd="15dp"
@@ -123,9 +123,10 @@
 
     <RelativeLayout
         android:id="@+id/imagesRelative"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/functionalLinear"
+        android:layout_alignParentEnd="true"
         android:visibility="invisible">
 
         <ImageView
@@ -141,20 +142,20 @@
 
         <LinearLayout
             android:id="@+id/linRecycler"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/btnHideShow"
+            android:layout_alignParentEnd="true"
             android:layout_marginHorizontal="5dp"
             android:layout_marginBottom="5dp"
             android:background="@drawable/images_linear_style">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvImages"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:spanCount="4"
                 tools:listitem="@layout/item_images" />
         </LinearLayout>
     </RelativeLayout>

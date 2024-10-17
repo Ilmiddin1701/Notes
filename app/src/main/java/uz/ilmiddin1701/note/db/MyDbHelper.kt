@@ -44,10 +44,6 @@ class MyDbHelper(var context: Context) : SQLiteOpenHelper(context, DB_NAME, null
         database.close()
     }
 
-    override fun editNote() {
-
-    }
-
     @SuppressLint("Recycle")
     override fun showNotes(): List<NoteData> {
         val list = ArrayList<NoteData>()
@@ -70,7 +66,19 @@ class MyDbHelper(var context: Context) : SQLiteOpenHelper(context, DB_NAME, null
         return list
     }
 
-    override fun deleteNote() {
+    override fun editNote(noteData: NoteData) {
+        val database = writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(NAME, noteData.name)
+        contentValues.put(TEXT, noteData.text)
+        contentValues.put(DATE, noteData.date)
+        contentValues.put(TIME, noteData.time)
+        contentValues.put(IMAGES, noteData.images)
+        database.update(TABLE_NAME, contentValues, "$ID = ?", arrayOf(noteData.id.toString()))
+    }
 
+    override fun deleteNote(noteData: NoteData) {
+        val database = this.writableDatabase
+        database.delete(TABLE_NAME, "$ID = ?", arrayOf(noteData.id.toString()))
     }
 }

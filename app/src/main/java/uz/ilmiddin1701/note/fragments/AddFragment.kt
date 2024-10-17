@@ -29,6 +29,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import uz.ilmiddin1701.note.R
 import uz.ilmiddin1701.note.adapters.ImagesAdapter
+import uz.ilmiddin1701.note.adapters.SowImagesAdapter
 import uz.ilmiddin1701.note.databinding.FragmentAddBinding
 import uz.ilmiddin1701.note.db.MyDbHelper
 import uz.ilmiddin1701.note.models.NoteData
@@ -39,7 +40,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.UUID
 
-class AddFragment : Fragment() {
+class AddFragment : Fragment(), ImagesAdapter.AddFragmentRvAction {
     private val binding by lazy { FragmentAddBinding.inflate(layoutInflater) }
     private lateinit var myDbHelper: MyDbHelper
     private lateinit var bnb: LinearLayout
@@ -212,11 +213,11 @@ class AddFragment : Fragment() {
                 loadImageFromExternalStorage.launch("image/*")
             }
 
+            // Rv Images hide show
             val imagesRvCloseAnim = AnimationUtils.loadAnimation(context, R.anim.images_rv_close_anim)
             val imagesRvOpenAnim = AnimationUtils.loadAnimation(context, R.anim.images_rv_open_anim)
             val btnHideShowDownAnim = AnimationUtils.loadAnimation(context, R.anim.btn_hide_show_down_anim)
             val btnHideShowUpAnim = AnimationUtils.loadAnimation(context, R.anim.btn_hide_show_up_anim)
-
             var checkedHideShow = true
             btnHideShow.setOnClickListener {
                 if (checkedHideShow) {
@@ -285,7 +286,7 @@ class AddFragment : Fragment() {
             btnSave.setOnClickListener {
                 val noteData = NoteData(
                     edtNoteName.text.toString(),
-                    Html.toHtml(edtNoteText.text as Spannable),
+                    Html.toHtml(edtNoteText.text as Spannable, Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE),
                     SimpleDateFormat("dd.MM.yyyy").format(Date()),
                     tvNoteTime.text.toString(),
                     imagesString
@@ -301,7 +302,7 @@ class AddFragment : Fragment() {
         uri ?: return@registerForActivityResult
         // Rasmni listga qo'shish va ko'rsatish
         imagesList.add(uri.toString())
-        imagesAdapter = ImagesAdapter(imagesList)
+        imagesAdapter = ImagesAdapter(imagesList, this)
         binding.rvImages.adapter = imagesAdapter
         binding.imagesRelative.visibility = View.VISIBLE
 
@@ -340,5 +341,20 @@ class AddFragment : Fragment() {
         } else {
             vibrator.vibrate(40) // Old versions
         }
+    }
+
+    override fun removeButtonClick(image: String, position: Int) {
+        val str = imagesString
+        val imagesArray = str.split(",").filter { it.isNotEmpty() }
+        imagesString = ""
+        for (i in imagesArray) {
+            if (image != i) {
+                imagesString += "$i,"
+            }
+        }
+        imagesList.removeAt(position)
+        if (imagesList.size == 0) binding.imagesRelative.visibility = View.GONE
+        imagesAdapter = ImagesAdapter(imagesList, this)
+        binding.rvImages.adapter = imagesAdapter
     }
 }

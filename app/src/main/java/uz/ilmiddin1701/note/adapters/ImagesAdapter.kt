@@ -5,15 +5,19 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import uz.ilmiddin1701.note.databinding.ItemImagesBinding
 
-class ImagesAdapter(var list: ArrayList<String>) : RecyclerView.Adapter<ImagesAdapter.Vh>() {
+class ImagesAdapter(var list: ArrayList<String>, var addFragmentRvAction: AddFragmentRvAction) : RecyclerView.Adapter<ImagesAdapter.Vh>() {
 
     inner class Vh(var itemImagesBinding: ItemImagesBinding) : RecyclerView.ViewHolder(itemImagesBinding.root) {
         fun onBind(image: String, position: Int) {
             try {
+                if (position == list.size-1) {
+                    itemImagesBinding.visibilityView.visibility = View.VISIBLE
+                }
                 if (image != "") {
                     val screenWidth = getScreenWidth(itemView.context)
                     val screenHeight = getScreenHeight(itemView.context)
@@ -35,6 +39,11 @@ class ImagesAdapter(var list: ArrayList<String>) : RecyclerView.Adapter<ImagesAd
                     inputStream2?.close()
 
                     itemImagesBinding.imgLoaded.setImageBitmap(bitmap)
+
+                    itemImagesBinding.linRemove.visibility = View.VISIBLE
+                    itemImagesBinding.btnRemoveImage.setOnClickListener {
+                        addFragmentRvAction.removeButtonClick(image, position)
+                    }
                 }
             } catch (e: Exception) {
                 Log.e("ImageLoadError", "Error loading image: ${e.message}")
@@ -50,6 +59,10 @@ class ImagesAdapter(var list: ArrayList<String>) : RecyclerView.Adapter<ImagesAd
 
     override fun onBindViewHolder(holder: Vh, position: Int) {
         holder.onBind(list[position], position)
+    }
+
+    interface AddFragmentRvAction {
+        fun removeButtonClick(image: String, position: Int)
     }
 
     // Rasmni o'lchamini optimallashtirish uchun funksiyani qo'shamiz

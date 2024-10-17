@@ -3,6 +3,7 @@ package uz.ilmiddin1701.note.adapters
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import uz.ilmiddin1701.note.databinding.ItemImagesBinding
@@ -12,9 +13,11 @@ class SowImagesAdapter(var list: ArrayList<String>, var imageClickAction: ImageC
 
     inner class Vh(var itemImagesBinding: ItemImagesBinding) : RecyclerView.ViewHolder(itemImagesBinding.root) {
         fun onBind(image: String, position: Int) {
+            if (position == list.size-1) {
+                itemImagesBinding.visibilityView.visibility = View.VISIBLE
+            }
             val screenWidth = getScreenWidth(itemView.context)
             val screenHeight = getScreenHeight(itemView.context)
-
             try {
                 // absolute path orqali faylga murojaat qilish
                 val file = File(image)
@@ -38,6 +41,10 @@ class SowImagesAdapter(var list: ArrayList<String>, var imageClickAction: ImageC
             itemImagesBinding.rvImageCard.setOnClickListener {
                 imageClickAction.imageClick(image)
             }
+            itemImagesBinding.rvImageCard.setOnLongClickListener {
+                imageClickAction.imageLongClick(image)
+                true
+            }
         }
     }
 
@@ -53,6 +60,7 @@ class SowImagesAdapter(var list: ArrayList<String>, var imageClickAction: ImageC
 
     interface ImageClickAction {
         fun imageClick(image: String)
+        fun imageLongClick(image: String)
     }
 
     fun getScreenWidth(context: Context): Int {

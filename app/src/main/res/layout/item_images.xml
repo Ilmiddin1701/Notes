@@ -20,6 +20,23 @@
             android:layout_height="match_parent"
             android:contentDescription="@string/item_image"
             android:scaleType="centerCrop" />
+
+        <LinearLayout
+            android:id="@+id/linRemove"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#4D000000"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/btnRemoveImage"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:contentDescription="@string/remove_image_button"
+                android:padding="7dp"
+                android:src="@drawable/ic_remove_image" />
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 
     <View

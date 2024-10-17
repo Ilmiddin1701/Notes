@@ -1,9 +1,11 @@
 package uz.ilmiddin1701.note.fragments
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
@@ -22,6 +24,7 @@ import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -33,6 +36,11 @@ import uz.ilmiddin1701.note.databinding.FragmentShowBinding
 import uz.ilmiddin1701.note.db.MyDbHelper
 import uz.ilmiddin1701.note.models.NoteData
 import uz.ilmiddin1701.note.utils.MySharedPreferences
+import java.io.File
+import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.UUID
 
 @Suppress("DEPRECATION")
 class ShowFragment : Fragment(), SowImagesAdapter.ImageClickAction {
@@ -43,24 +51,19 @@ class ShowFragment : Fragment(), SowImagesAdapter.ImageClickAction {
     private var italicStyle = false
     private var markerStyle = false
 
-    private lateinit var imagesList: ArrayList<String>
     private var imagesString = ""
     private lateinit var showImagesAdapter: SowImagesAdapter
 
     private lateinit var loadedNote: NoteData
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "SimpleDateFormat")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        MySharedPreferences.init(requireContext())
         myDbHelper = MyDbHelper(requireContext())
-        val n = arguments?.getSerializable("keyNoteData") as NoteData
-        for(i in myDbHelper.showNotes()) {
-            if (i.id == n.id) {
-                loadedNote = i
-            }
-        }
+        MySharedPreferences.init(requireContext())
+        loadedNote = arguments?.getSerializable("keyNoteData") as NoteData
+
         binding.apply {
             when (MySharedPreferences.bottomNavBarColor) {
                 0 -> {
@@ -130,6 +133,7 @@ class ShowFragment : Fragment(), SowImagesAdapter.ImageClickAction {
                     functionalLinear.setBackgroundColor(Color.parseColor("#B93E20"))
                 }
             }
+
             btnBack.setOnClickListener { findNavController().popBackStack() }
             edtNoteText.addTextChangedListener { tvSymbol.text = it.toString().length.toString() + " symbols" }
             //Background Color
@@ -168,6 +172,10 @@ class ShowFragment : Fragment(), SowImagesAdapter.ImageClickAction {
                     btnMarker.setImageResource(R.drawable.ic_active_marker)
                 }
                 vibrate(requireContext())
+            }
+
+            btnGallery.setOnClickListener {
+                loadImageFromExternalStorage.launch("image/*")
             }
 
             // Rv Images hide show
@@ -212,8 +220,9 @@ class ShowFragment : Fragment(), SowImagesAdapter.ImageClickAction {
             tvNoteTime.text = loadedNote.time
             tvSymbol.text = edtNoteText.text.length.toString() + " symbols"
             if (loadedNote.images != "") {
+                imagesString = loadedNote.images!!
                 imagesRelative.visibility = View.VISIBLE
-                val imageArray = loadedNote.images!!.split(",").filter { it.isNotEmpty() }
+                val imageArray = imagesString.split(",").filter { it.isNotEmpty() }
                 showImagesAdapter = SowImagesAdapter(imageArray as ArrayList<String>, this@ShowFragment)
                 rvImages.adapter = showImagesAdapter
                 linRecycler.visibility = View.VISIBLE
@@ -262,8 +271,39 @@ class ShowFragment : Fragment(), SowImagesAdapter.ImageClickAction {
                     currentText = newText
                 }
             })
+
+            // Edit Note
+            btnEdit.setOnClickListener {
+                myDbHelper.editNote(
+                    NoteData(
+                        loadedNote.id,
+                        edtNoteName.text.toString(),
+                        Html.toHtml(edtNoteText.text as Spannable, Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE),
+                        SimpleDateFormat("dd.MM.yyyy").format(Date()),
+                        SimpleDateFormat("HH:mm:ss").format(Date()),
+                        imagesString
+                    )
+                )
+                findNavController().popBackStack()
+            }
         }
         return binding.root
+    }
+
+    private val loadImageFromExternalStorage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uri ?: return@registerForActivityResult
+        val inputStream = requireActivity().contentResolver?.openInputStream(uri)
+        val file = File(requireActivity().filesDir, "IMG_${UUID.randomUUID()}.jpg")
+        val fileOutputStream = FileOutputStream(file)
+        inputStream?.copyTo(fileOutputStream)
+        inputStream?.close()
+        fileOutputStream.close()
+        imagesString += file.absolutePath + ","
+
+        val imageArray = imagesString.split(",").filter { it.isNotEmpty() }
+        showImagesAdapter = SowImagesAdapter(imageArray as ArrayList<String>, this@ShowFragment)
+        binding.rvImages.adapter = showImagesAdapter
+        binding.imagesRelative.visibility = View.VISIBLE
     }
 
     override fun onPause() {
@@ -297,5 +337,26 @@ class ShowFragment : Fragment(), SowImagesAdapter.ImageClickAction {
     // Image Click
     override fun imageClick(image: String) {
         findNavController().navigate(R.id.imageShowFragment, bundleOf("keyImageResource" to image))
+    }
+
+    override fun imageLongClick(image: String) {
+        val dialog = AlertDialog.Builder(context).create()
+        dialog.setTitle("Delete picture?")
+        dialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes") { _, _ ->
+            val str = imagesString
+            val imagesArray = str.split(",").filter { it.isNotEmpty() }
+            imagesString = ""
+            for (i in imagesArray) {
+                if (image != i) {
+                    imagesString += "$i,"
+                }
+            }
+            if (imagesString == "") binding.imagesRelative.visibility = View.GONE
+            val newImagesArray = imagesString.split(",").filter { it.isNotEmpty() }
+            showImagesAdapter = SowImagesAdapter(newImagesArray as ArrayList<String>, this@ShowFragment)
+            binding.rvImages.adapter = showImagesAdapter
+        }
+        dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No") { _, _ -> dialog.cancel() }
+        dialog.show()
     }
 }

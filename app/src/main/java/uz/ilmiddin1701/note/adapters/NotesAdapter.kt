@@ -14,7 +14,7 @@ import uz.ilmiddin1701.note.utils.MySharedPreferences
 class NotesAdapter(var notesActionListener: NotesActionListener, var list: ArrayList<NoteData>) : Adapter<NotesAdapter.Vh>() {
 
     inner class Vh(var itemNoteBinding: ItemNoteBinding) : ViewHolder(itemNoteBinding.root) {
-        fun onBind(noteData: NoteData) {
+        fun onBind(noteData: NoteData, position: Int) {
             itemNoteBinding.apply {
                 noteName.text = noteData.name
                 noteName.isSelected = true
@@ -23,12 +23,16 @@ class NotesAdapter(var notesActionListener: NotesActionListener, var list: Array
                 root.setOnClickListener {
                     notesActionListener.onNoteClick(noteData)
                 }
+                root.setOnLongClickListener {
+                    notesActionListener.onNoteLongClick(noteData, position)
+                    true
+                }
                 if (position == 0 || position == 1) {
                     visibilityView1.visibility = View.VISIBLE
                 } else {
                     visibilityView1.visibility = View.GONE
                 }
-                if (position == list.size || position == list.size - 1) {
+                if (position == list.size - 1 && list.size - 1 > 2 || position == list.size - 2 && list.size - 2 > 1) {
                     visibilityView2.visibility = View.VISIBLE
                 } else {
                     visibilityView2.visibility = View.GONE
@@ -58,10 +62,11 @@ class NotesAdapter(var notesActionListener: NotesActionListener, var list: Array
     override fun getItemCount(): Int = list.size
 
     override fun onBindViewHolder(holder: Vh, position: Int) {
-        holder.onBind(list[position])
+        holder.onBind(list[position], position)
     }
 
     interface NotesActionListener {
         fun onNoteClick(noteData: NoteData)
+        fun onNoteLongClick(noteData: NoteData, position: Int)
     }
 }
