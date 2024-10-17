@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/actionBar"
         android:background="@android:color/transparent"
-        android:hint="Name"
+        android:hint="@string/name"
         android:importantForAutofill="no"
         android:inputType="textCapSentences"
         android:paddingHorizontal="15dp"
@@ -92,7 +92,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:gravity="center_vertical"
-            android:text="0 symbols"
+            android:text="@string/_0_symbols"
             android:textColor="@color/black" />
     </LinearLayout>
 
@@ -110,7 +110,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:gravity="start"
-            android:hint="Start typing..."
+            android:hint="@string/start_typing"
             android:importantForAutofill="no"
             android:inputType="textCapSentences|textMultiLine"
             android:paddingHorizontal="15dp"

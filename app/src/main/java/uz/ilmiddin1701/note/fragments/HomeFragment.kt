@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import uz.ilmiddin1701.note.R
 import uz.ilmiddin1701.note.adapters.NotesAdapter
-import uz.ilmiddin1701.note.adapters.SowImagesAdapter
 import uz.ilmiddin1701.note.databinding.FragmentHomeBinding
 import uz.ilmiddin1701.note.db.MyDbHelper
 import uz.ilmiddin1701.note.models.NoteData

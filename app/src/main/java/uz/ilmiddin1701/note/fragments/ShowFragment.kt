@@ -10,7 +10,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.provider.ContactsContract.CommonDataKinds.Note
 import android.text.Editable
 import android.text.Html
 import android.text.Spannable
@@ -30,7 +29,6 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import uz.ilmiddin1701.note.R
-import uz.ilmiddin1701.note.adapters.ImagesAdapter
 import uz.ilmiddin1701.note.adapters.SowImagesAdapter
 import uz.ilmiddin1701.note.databinding.FragmentShowBinding
 import uz.ilmiddin1701.note.db.MyDbHelper

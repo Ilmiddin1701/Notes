@@ -29,7 +29,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import uz.ilmiddin1701.note.R
 import uz.ilmiddin1701.note.adapters.ImagesAdapter
-import uz.ilmiddin1701.note.adapters.SowImagesAdapter
 import uz.ilmiddin1701.note.databinding.FragmentAddBinding
 import uz.ilmiddin1701.note.db.MyDbHelper
 import uz.ilmiddin1701.note.models.NoteData
@@ -40,6 +39,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.UUID
 
+@Suppress("DEPRECATION")
 class AddFragment : Fragment(), ImagesAdapter.AddFragmentRvAction {
     private val binding by lazy { FragmentAddBinding.inflate(layoutInflater) }
     private lateinit var myDbHelper: MyDbHelper
